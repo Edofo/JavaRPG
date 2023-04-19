@@ -88,4 +88,5 @@ public class Colors {
             printColoredString(YELLOW, string);
         }
     }
+
 }

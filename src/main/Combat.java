@@ -191,7 +191,7 @@ public class Combat {
 
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
-                if (choice >= 1 && choice <= party.getPlayers().size()) {
+                if (choice >= 1 && choice <= monsters.size()) {
                     break;
                 }
             }
@@ -265,7 +265,7 @@ public class Combat {
     private boolean isCombatOver() {
         boolean isPlayerDead = true;
         // Check if the player is dead
-        List<Character> playersDead = party.getDeadPlayers();
+        List<Heros> playersDead = party.getDeadPlayers();
 
         if (playersDead.size() == party.getPlayers().size()) {
             Colors.printColoredString(Colors.RED, "The players are dead!");

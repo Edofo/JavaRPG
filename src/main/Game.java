@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import main.characterclass.*;
@@ -69,42 +70,56 @@ public class Game {
                 break;
         }
 
-        Character player = new Heros(name, characterClass.getHealth(), characterClass.getAttack(),
+        Heros player = new Heros(name, characterClass.getHealth(), characterClass.getAttack(),
                 characterClass.getDefense(), characterClass.getClass().getSimpleName());
 
-        Character ai1Character = new Heros("AI1", ai1.getHealth(), ai1.getAttack(), ai1.getDefense(),
+        Heros ai1Character = new Heros("AI1", ai1.getHealth(), ai1.getAttack(), ai1.getDefense(),
                 ai1.getClass().getSimpleName());
 
-        Character ai2Character = new Heros("AI2", ai2.getHealth(), ai2.getAttack(), ai2.getDefense(),
+        Heros ai2Character = new Heros("AI2", ai2.getHealth(), ai2.getAttack(), ai2.getDefense(),
                 ai2.getClass().getSimpleName());
 
         party = new Party(player, ai1Character, ai2Character);
     }
 
     public void createDungeon() {
-        // create array list of monsters
-        Monster[] room0Monsters = { new Monster("Skeleton", 12, 6, 4),
-                new Monster("Troll", 20, 10, 8) };
-        dungeon.add(new Room(room0Monsters));
+        // generate random number of rooms between 5 and 10
+        int numRooms = (int) (Math.random() * 6) + 5;
 
-        Monster[] room1Monsters = { new Monster("Skeleton", 12, 6, 4) };
-        dungeon.add(new Room(room1Monsters));
+        System.out.println("Generating dungeon with " + numRooms + " rooms...");
 
-        Monster[] room2Monsters = { new Monster("Troll", 20, 10, 8) };
-        dungeon.add(new Room(room2Monsters));
+        for (int i = 0; i < numRooms; i++) {
+            // check if the room is the last room
+            if (i == numRooms - 1) {
+                Boss boss = Boss.generateRandomBoss();
 
-        Monster[] room3Monsters = { new Monster("Dragon", 30, 15, 12),
-                new Monster("Giant Spider", 10, 5, 3) };
-        dungeon.add(new Room(room3Monsters));
+                Room room = new Room(boss);
 
-        dungeon.add(new Room(new Boss("Evil Wizard", 50, 20, 15)));
+                dungeon.add(room);
+            } else {
+                // generate random number of monsters between 1 and 3
+                int numMonsters = (int) (Math.random() * 3) + 1;
+
+                List<Monster> monsters = Monster.generateRandomMonsterList(numMonsters);
+
+                dungeon.add(new Room(monsters.toArray(new Monster[0])));
+            }
+        }
+
+        System.out.println("Dungeon generated!");
+
     }
 
     public void play() {
         int currentRoom = 0;
         int numRooms = dungeon.size();
 
-        while (!isGameOver || currentRoom < numRooms) {
+        while (!isGameOver) {
+            if (currentRoom == numRooms) {
+                isGameOver = true;
+                break;
+            }
+
             Room room = dungeon.get(currentRoom);
 
             Colors.printColoredString(Colors.RED_BACKGROUND_BRIGHT,
@@ -121,6 +136,7 @@ public class Game {
             // Check if the party is alive
             if (party.getAlivePlayers().size() == 0) {
                 isGameOver = true;
+                break;
             }
 
             Colors.printColoredString(Colors.GREEN, "You defeated the monsters!");
@@ -128,7 +144,7 @@ public class Game {
             room.setClear(true);
 
             // heal 30% all players in the party
-            for (Character player : party.getAlivePlayers()) {
+            for (Heros player : party.getAlivePlayers()) {
                 int healthMax = player.getMaxHealth();
 
                 int healthNew = (int) (30 * healthMax / 100);
@@ -143,22 +159,59 @@ public class Game {
 
             if (item != null) {
                 Colors.printColoredString(Colors.GREEN,
-                        "You found a " + item.getName() + " stats:" + item.getStats() + "!");
+                        "You found a new Item!");
+                item.printStats();
 
                 int choice;
+                boolean isNextRoom = false;
 
-                while (true) {
-                    Colors.printColoredString(Colors.BLUE, "Do you want to equip it? (1 = yes, 2 = no)");
+                while (!isNextRoom) {
+                    Colors.printColoredList("Do you want to equit it?", new String[] {
+                            "  1. Yes",
+                            "  2. No",
+                    });
 
                     if (scanner.hasNextInt()) {
                         choice = scanner.nextInt();
-                        if (choice == 1 || choice == 2) {
+                        if (choice == 1) {
+                            int playerChoice;
+
+                            while (true) {
+                                Colors.printColoredString(Colors.BLUE, "Choose a player to equip the item:");
+
+                                for (int i = 0; i < party.getAlivePlayers().size(); i++) {
+                                    Character player = party.getAlivePlayers().get(i);
+                                    Colors.printColoredString(Colors.YELLOW,
+                                            "  " + (i + 1) + ". " + player.getName() + " ("
+                                                    + player.getHealth() + " HP)");
+                                }
+
+                                if (scanner.hasNextInt()) {
+                                    playerChoice = scanner.nextInt();
+                                    if (playerChoice >= 1 && playerChoice <= 3) {
+                                        Heros player = party.getAlivePlayers().get(playerChoice - 1);
+
+                                        player.addItemToInventory(item);
+
+                                        Colors.printColoredString(Colors.GREEN, "Item equipped!");
+
+                                        isNextRoom = true;
+                                        break;
+                                    }
+                                }
+
+                                scanner.nextLine();
+                                Colors.printColoredString(Colors.RED, "Invalid choice");
+                            }
+
+                        } else {
+                            isNextRoom = true;
                             break;
                         }
                     }
 
                     scanner.nextLine();
-                    Colors.printColoredString(Colors.RED, "Invalid choice");
+                    Colors.printColoredString(Colors.RED, "Invalid aachoice");
                 }
             }
 
@@ -166,12 +219,41 @@ public class Game {
         }
 
         if (!isGameOver) {
-
             // check if the players of the party are alive
             if (party.getAlivePlayers().size() > 0) {
                 Colors.printColoredString(Colors.GREEN, "Congratulations, you finished the dungeon!");
 
-                // Code to reward the player
+                // new game or exit
+                int choice;
+
+                while (true) {
+                    Colors.printColoredList("Do you want to play again?", new String[] {
+                            "  1. Yes",
+                            "  2. No",
+                    });
+
+                    if (scanner.hasNextInt()) {
+                        choice = scanner.nextInt();
+                        if (choice == 1 || choice == 2) {
+                            if (choice == 1) {
+                                isGameOver = false;
+                                currentRoom = 0;
+                                party = null;
+                                dungeon = new ArrayList<>();
+                                createCharacter();
+                                createDungeon();
+                                play();
+                            } else {
+                                Colors.printColoredString(Colors.RED, "Goodbye!");
+                            }
+                            break;
+                        }
+                    }
+
+                    scanner.nextLine();
+                    Colors.printColoredString(Colors.RED, "Invalid choice");
+                }
+
             } else {
                 Colors.printColoredString(Colors.RED, "You died, game over!");
             }

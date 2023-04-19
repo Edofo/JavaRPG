@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.item.Item;
@@ -12,6 +13,7 @@ public class Heros extends Character {
     public Heros(String name, int health, int attack, int defense, String characterClass) {
         super(name, health, attack, defense);
         this.characterClass = characterClass;
+        this.inventory = new ArrayList<>();
     }
 
     // Get all damage from the character's inventory and add it to the character's
@@ -27,7 +29,6 @@ public class Heros extends Character {
     }
 
     // Get all defense from the character's inventory and add it to the character's
-    // defense
     public int getDefense() {
         int defense = super.getDefense();
         for (Item item : inventory) {
@@ -40,14 +41,42 @@ public class Heros extends Character {
 
     // Method to add an item to the character's inventory
     public void addItemToInventory(Item item) {
-        inventory.add(item);
+        List<Item> itemsToRemove = new ArrayList<>();
         // check if the item is not a potion
         if (item.getType() != ItemType.POTION) {
+            if (item.getType() == ItemType.WEAPON) {
+                // check if the character already has a weapon equipped
+                for (Item i : inventory) {
+                    if (i.getType() == ItemType.WEAPON) {
+                        // remove the old weapon's stats from the character's stats
+                        itemsToRemove.add(i);
+                    }
+                }
+            }
+
+            if (item.getType() == ItemType.ARMOR) {
+                // check if the character already has armor equipped
+                for (Item i : inventory) {
+                    if (i.getType() == ItemType.ARMOR) {
+                        // remove the old armor's stats from the character's stats
+                        itemsToRemove.add(i);
+                    }
+                }
+            }
+            inventory.add(item);
+
             // add the item's stats to the character's stats
             this.getAttack();
             this.getDefense();
+        } else {
+            // check if the item is a potion
+            inventory.add(item);
         }
 
+        // Remove the items that need to be removed
+        for (Item itemToRemove : itemsToRemove) {
+            removeItemFromInventory(itemToRemove);
+        }
     }
 
     // Method to remove an item from the character's inventory

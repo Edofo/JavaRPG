@@ -1,6 +1,5 @@
 package main.item;
 
-import java.io.File;
 import java.util.List;
 
 public class Item {
@@ -14,50 +13,35 @@ public class Item {
         this.stats = stats;
     }
 
+    // method to print the item's stats
+    public void printStats() {
+        System.out.println("Name: " + name);
+        System.out.println("Type: " + type);
+        System.out.println(
+                "Stats: " + "Attack: " + stats.get(0) + " Defense: " + stats.get(1) + " Health: " + stats.get(2));
+    }
+
     // Method to get random Weapon
     public static Item getRandomItem() {
 
-        // int randomType = (int) (Math.random() * ItemType.values().length);
-        int randomType = 0;
+        int randomType = (int) (Math.random() * ItemType.values().length);
+        // int randomType = 0;
 
-        String type;
+        Item item = null;
 
         switch (randomType) {
             case 0:
-                type = "weapon";
+                item = Weapon.generateRandomWeapon();
                 break;
             case 1:
-                type = "armor";
+                item = Armor.generateRandomArmor();
                 break;
             case 2:
-                type = "potion";
+                item = Potion.generateRandomPotion();
                 break;
             default:
-                type = "weapon";
+                item = Weapon.generateRandomWeapon();
                 break;
-        }
-
-        File itemFolder = new File("src/main/item/" + type);
-
-        // Get all files in the folder
-        File[] itemFiles = itemFolder.listFiles();
-
-        // Get a random file
-        File randomItemFile = itemFiles[(int) (Math.random() * itemFiles.length)];
-
-        // Get the name of the file
-        String itemName = randomItemFile.getName();
-
-        // Remove the .java extension
-        itemName = itemName.substring(0, itemName.length() - 5);
-
-        // Create an instance of the item
-        Item item = null;
-
-        try {
-            item = (Item) Class.forName("main.item." + type + "." + itemName).newInstance();
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return item;
