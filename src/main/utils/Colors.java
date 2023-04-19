@@ -81,4 +81,11 @@ public class Colors {
     public static void printColoredString(String color, String string) {
         System.out.println(getColoredString(color, string));
     }
+
+    public static void printColoredList(String title, String[] list) {
+        printColoredString(BLUE, title);
+        for (String string : list) {
+            printColoredString(YELLOW, string);
+        }
+    }
 }

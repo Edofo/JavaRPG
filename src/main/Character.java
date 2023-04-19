@@ -3,16 +3,16 @@ package main;
 public class Character {
 
     private String name;
-    private String firstName;
 
+    private int maxHealth;
     private int health;
     private int attack;
     private int defense;
 
     // Constructor
-    public Character(String name, String firstName, int health, int attack, int defense) {
+    public Character(String name, int health, int attack, int defense) {
         this.name = name;
-        this.firstName = firstName;
+        this.maxHealth = health;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
@@ -21,7 +21,8 @@ public class Character {
     // Method to print the character's stats
     public void printStats() {
         System.out.println("Name: " + this.name);
-        System.out.println("Health: " + this.health);
+        System.out.println("Health: " + this.health + "/" + this.maxHealth + " ("
+                + (int) ((double) this.health / this.maxHealth * 100) + "%)");
         System.out.println("Attack: " + this.attack);
         System.out.println("Defense: " + this.defense);
     }
@@ -48,9 +49,21 @@ public class Character {
     }
 
     // Method to heal another character
-    public void heal(Character target) {
-        target.health += this.attack;
-        System.out.println(this.name + " heals " + target.name + " for " + this.attack + " health!");
+    public void heal(Character target, int amount) {
+        target.health += amount;
+        if (target.health > target.maxHealth) {
+            target.health = target.maxHealth;
+        }
+        System.out.println(this.name + " heals " + target.name + " for " + amount + " health!");
+    }
+
+    // heal self
+    public void heal(int amount) {
+        this.health += amount;
+        if (this.health > this.maxHealth) {
+            this.health = this.maxHealth;
+        }
+        // System.out.println(this.name + " heals for " + amount + " health!");
     }
 
     // Method to check if a character is alive
@@ -77,12 +90,8 @@ public class Character {
         this.name = name;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public int getHealth() {

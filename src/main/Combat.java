@@ -22,36 +22,36 @@ public class Combat {
         int loop = 0;
 
         int coinFlip = 0;
+        int choice = 0;
 
         // ask the player to choose the coin flip
-        System.out.println("Choose heads or tails to start the combat:");
-        System.out.println("  1. Heads");
-        System.out.println("  2. Tails");
+        while (true) {
+            Colors.printColoredList("Choose heads or tails to start the combat:", new String[] {
+                    "  1. Tails",
+                    "  2. Heads",
+            });
 
-        // get the player's choice
-        int choice = scanner.nextInt();
-
-        // Consume newline character
-        scanner.nextLine();
-
-        // check if the player's choice is valid
-        if (choice == 1 || choice == 2) {
-            // get a random number between 1 and 2
-            coinFlip = (int) (Math.random() * 2) + 1;
-
-            // check if the player's choice is the same as the coin flip
-            if (choice == coinFlip) {
-                // print the message
-                Colors.printColoredString(Colors.GREEN, "You won the coin flip! You start the combat!");
-            } else {
-                // print the message
-                Colors.printColoredString(Colors.RED, "You lost the coin flip! The monsters start the combat!");
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice >= 1 && choice <= 2) {
+                    break;
+                }
             }
+
+            scanner.nextLine();
+            Colors.printColoredString(Colors.RED, "Invalid choice");
+        }
+
+        // get a random number between 1 and 2
+        coinFlip = (int) (Math.random() * 2) + 1;
+
+        // check if the player's choice is the same as the coin flip
+        if (choice == coinFlip) {
+            // print the message
+            Colors.printColoredString(Colors.GREEN, "You won the coin flip! You start the combat!");
         } else {
             // print the message
-            Colors.printColoredString(Colors.RED, "Invalid choice");
-
-            startCombat(scanner);
+            Colors.printColoredString(Colors.RED, "You lost the coin flip! The monsters start the combat!");
         }
 
         // Loop until the combat is over
@@ -127,27 +127,33 @@ public class Combat {
 
     // Create a method to select a player
     private Character selectPlayer(Scanner scanner) {
-        // Print the message
-        System.out.println("Which player do you want to use?");
+        int choice;
 
-        // Loop through the players and print their names
-        for (int i = 0; i < party.getPlayers().size(); i++) {
-            if (party.getPlayers().get(i).getHealth() > 0) {
-                System.out.println((i + 1) + ". " + party.getPlayers().get(i).getName() + " ("
-                        + party.getPlayers().get(i).getHealth() + " HP)");
-            } else {
-                Colors.printColoredString(Colors.RED_UNDERLINED,
-                        (i + 1) + ". " + party.getPlayers().get(i).getName() + " ("
-                                + party.getPlayers().get(i).getHealth() + " HP)");
+        while (true) {
+            Colors.printColoredString(Colors.BLUE, "Which player do you want to use?");
+
+            // Loop through the players and print their names
+            for (int i = 0; i < party.getPlayers().size(); i++) {
+                String value = "  " + (i + 1) + ". " + party.getPlayers().get(i).getName() + " ("
+                        + party.getPlayers().get(i).getHealth()
+                        + " HP)";
+                if (party.getPlayers().get(i).getHealth() > 0) {
+                    Colors.printColoredString(Colors.YELLOW, value);
+                } else {
+                    Colors.printColoredString(Colors.RED_UNDERLINED, value);
+                }
             }
 
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice >= 1 && choice <= party.getPlayers().size()) {
+                    break;
+                }
+            }
+
+            scanner.nextLine(); // consume the invalid input
+            Colors.printColoredString(Colors.RED, "Invalid choice");
         }
-
-        // Get the player's choice
-        int choice = scanner.nextInt();
-
-        // Consume newline character
-        scanner.nextLine();
 
         Character player = party.getPlayers().get(choice - 1);
 
@@ -157,7 +163,7 @@ public class Combat {
             Colors.printColoredString(Colors.RED, "Invalid choice");
 
             // Get the player's choice
-            selectPlayer(scanner);
+            return selectPlayer(scanner);
         }
 
         // Return the player
@@ -167,24 +173,32 @@ public class Combat {
     // Create a method to get the monster's choice
     private Monster selectMonster(Scanner scanner) {
         // Print the message
-        System.out.println("Which monster do you want to attack?");
+        int choice;
 
-        // loop through the monsters and print their names
-        for (int i = 0; i < monsters.size(); i++) {
-            if (monsters.get(i).getHealth() > 0) {
-                System.out.println(
-                        (i + 1) + ". " + monsters.get(i).getName() + " (" + monsters.get(i).getHealth() + " HP)");
-            } else {
-                Colors.printColoredString(Colors.RED_UNDERLINED,
-                        (i + 1) + ". " + monsters.get(i).getName() + " (" + monsters.get(i).getHealth() + " HP)");
+        while (true) {
+            Colors.printColoredString(Colors.BLUE, "Which monster do you want to attack?");
+
+            // loop through the monsters and print their names
+            for (int i = 0; i < monsters.size(); i++) {
+                String value = "  " + (i + 1) + ". " + monsters.get(i).getName() + " (" + monsters.get(i).getHealth()
+                        + " HP)";
+                if (monsters.get(i).getHealth() > 0) {
+                    Colors.printColoredString(Colors.YELLOW, value);
+                } else {
+                    Colors.printColoredString(Colors.RED_UNDERLINED, value);
+                }
             }
+
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice >= 1 && choice <= party.getPlayers().size()) {
+                    break;
+                }
+            }
+
+            scanner.nextLine(); // consume the invalid input
+            Colors.printColoredString(Colors.RED, "Invalid choice");
         }
-
-        // Get the monster's choice
-        int choice = scanner.nextInt();
-
-        // Consume newline character
-        scanner.nextLine();
 
         // check if the monster's choice is valid
         Monster monster = monsters.get(choice - 1);
@@ -205,23 +219,23 @@ public class Combat {
     // Create a method to get the player's choice
     private int getPlayerChoice(Scanner scanner) {
         // Print the message
-        System.out.println("What do you want to do?");
-        System.out.println("1. Attack a monster");
-        System.out.println("2. Defend");
+        int choice;
 
-        // Get the player's choice
-        int choice = scanner.nextInt();
+        while (true) {
+            Colors.printColoredList("What do you want to do?", new String[] {
+                    "  1. Attack a monster",
+                    // " 2. Defend"
+            });
 
-        // Consume newline character
-        scanner.nextLine();
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                if (choice >= 1 && choice <= 2) {
+                    break;
+                }
+            }
 
-        // Check if the player's choice is valid
-        if (choice != 1 && choice != 2) {
-            // Print the message
+            scanner.nextLine(); // consume the invalid input
             Colors.printColoredString(Colors.RED, "Invalid choice");
-
-            // Get the player's choice
-            choice = getPlayerChoice(scanner);
         }
 
         // Return the choice

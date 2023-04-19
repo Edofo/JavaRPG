@@ -16,6 +16,7 @@ public class CharacterClass {
         this.abilities = abilities;
     }
 
+    // Getters and Setters for each attribute
     public int getHealth() {
         return health;
     }

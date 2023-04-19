@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import main.characterclass.*;
 import main.dungeon.*;
+import main.item.Item;
 import main.utils.*;
 
 public class Game {
@@ -23,16 +24,25 @@ public class Game {
         Colors.printColoredString(Colors.BLUE, "Enter character name:");
         String name = scanner.nextLine();
 
-        Colors.printColoredString(Colors.BLUE, "Enter character first name:");
-        String firstName = scanner.nextLine();
+        int classChoice;
 
-        Colors.printColoredString(Colors.BLUE, "Choose character class:");
-        Colors.printColoredString(Colors.YELLOW, "  1. Warrior");
-        Colors.printColoredString(Colors.YELLOW, "  2. Mage");
-        Colors.printColoredString(Colors.YELLOW, "  3. Support");
-        int classChoice = scanner.nextInt();
+        while (true) {
+            Colors.printColoredList("Choose your class:", new String[] {
+                    "  1. Warrior",
+                    "  2. Mage",
+                    "  3. Support",
+            });
 
-        scanner.nextLine(); // Consume newline character
+            if (scanner.hasNextInt()) {
+                classChoice = scanner.nextInt();
+                if (classChoice >= 1 && classChoice <= 3) {
+                    break;
+                }
+            }
+
+            scanner.nextLine();
+            Colors.printColoredString(Colors.RED, "Invalid choice");
+        }
 
         CharacterClass characterClass = null;
         CharacterClass ai1 = null;
@@ -59,13 +69,13 @@ public class Game {
                 break;
         }
 
-        Character player = new Heros(name, firstName, characterClass.getHealth(), characterClass.getAttack(),
+        Character player = new Heros(name, characterClass.getHealth(), characterClass.getAttack(),
                 characterClass.getDefense(), characterClass.getClass().getSimpleName());
 
-        Character ai1Character = new Heros("AI1", "AI1", ai1.getHealth(), ai1.getAttack(), ai1.getDefense(),
+        Character ai1Character = new Heros("AI1", ai1.getHealth(), ai1.getAttack(), ai1.getDefense(),
                 ai1.getClass().getSimpleName());
 
-        Character ai2Character = new Heros("AI2", "AI2", ai2.getHealth(), ai2.getAttack(), ai2.getDefense(),
+        Character ai2Character = new Heros("AI2", ai2.getHealth(), ai2.getAttack(), ai2.getDefense(),
                 ai2.getClass().getSimpleName());
 
         party = new Party(player, ai1Character, ai2Character);
@@ -73,31 +83,32 @@ public class Game {
 
     public void createDungeon() {
         // create array list of monsters
-        Monster[] room0Monsters = { new Monster("Skeleton", "lv 1", 12, 6, 4),
-                new Monster("Troll", "lv 2", 20, 10, 8) };
+        Monster[] room0Monsters = { new Monster("Skeleton", 12, 6, 4),
+                new Monster("Troll", 20, 10, 8) };
         dungeon.add(new Room(room0Monsters));
 
-        Monster[] room1Monsters = { new Monster("Skeleton", "lv 3", 12, 6, 4) };
+        Monster[] room1Monsters = { new Monster("Skeleton", 12, 6, 4) };
         dungeon.add(new Room(room1Monsters));
 
-        Monster[] room2Monsters = { new Monster("Troll", "lv 5", 20, 10, 8) };
+        Monster[] room2Monsters = { new Monster("Troll", 20, 10, 8) };
         dungeon.add(new Room(room2Monsters));
 
-        Monster[] room3Monsters = { new Monster("Dragon", "lv 6", 30, 15, 12),
-                new Monster("Giant Spider", "lv 6", 10, 5, 3) };
+        Monster[] room3Monsters = { new Monster("Dragon", 30, 15, 12),
+                new Monster("Giant Spider", 10, 5, 3) };
         dungeon.add(new Room(room3Monsters));
 
-        dungeon.add(new Room(new Boss("Evil Wizard", "lv 15", 50, 20, 15)));
+        dungeon.add(new Room(new Boss("Evil Wizard", 50, 20, 15)));
     }
 
     public void play() {
         int currentRoom = 0;
         int numRooms = dungeon.size();
 
-        while (!isGameOver && currentRoom < numRooms) {
+        while (!isGameOver || currentRoom < numRooms) {
             Room room = dungeon.get(currentRoom);
 
-            System.out.println("Entering room " + (currentRoom + 1) + " with monsters:");
+            Colors.printColoredString(Colors.RED_BACKGROUND_BRIGHT,
+                    "Entering room " + (currentRoom + 1) + " with monsters:");
 
             for (Monster monster : room.getMonsters()) {
                 System.out.println("- " + monster.getName() + " (" + monster.getHealth() + " HP)");
@@ -106,6 +117,50 @@ public class Game {
             // Code for player actions and combat
             Combat combat = new Combat(party, room.getMonsters());
             combat.startCombat(scanner);
+
+            // Check if the party is alive
+            if (party.getAlivePlayers().size() == 0) {
+                isGameOver = true;
+            }
+
+            Colors.printColoredString(Colors.GREEN, "You defeated the monsters!");
+
+            room.setClear(true);
+
+            // heal 30% all players in the party
+            for (Character player : party.getAlivePlayers()) {
+                int healthMax = player.getMaxHealth();
+
+                int healthNew = (int) (30 * healthMax / 100);
+
+                player.heal(healthNew);
+
+                // System.out.println(player.getName() + " healed to " + player.getHealth() + "
+                // HP");
+            }
+
+            Item item = room.generateItem();
+
+            if (item != null) {
+                Colors.printColoredString(Colors.GREEN,
+                        "You found a " + item.getName() + " stats:" + item.getStats() + "!");
+
+                int choice;
+
+                while (true) {
+                    Colors.printColoredString(Colors.BLUE, "Do you want to equip it? (1 = yes, 2 = no)");
+
+                    if (scanner.hasNextInt()) {
+                        choice = scanner.nextInt();
+                        if (choice == 1 || choice == 2) {
+                            break;
+                        }
+                    }
+
+                    scanner.nextLine();
+                    Colors.printColoredString(Colors.RED, "Invalid choice");
+                }
+            }
 
             currentRoom++;
         }
