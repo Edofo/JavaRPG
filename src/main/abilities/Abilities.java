@@ -1,18 +1,45 @@
 package main.abilities;
 
+import main.Character;
+
 public class Abilities {
     private String name;
+
+    private AbilitiesType type;
 
     private int damage;
     private int heal;
     private int defense;
     // private int manaCost;
 
-    public Abilities(String name, int damage, int heal, int defense) {
+    public Abilities(String name, AbilitiesType type, int damage, int heal, int defense) {
         this.name = name;
+        this.type = type;
         this.damage = damage;
         this.heal = heal;
         this.defense = defense;
+    }
+
+    // use the abilities and change the stats of the player
+    public void useAbilities(Character character, Character target) {
+        switch (type) {
+            case HEAL:
+                character.heal(target, target.getHealth() + heal);
+                break;
+            case ATTACK:
+                character.attack(target, this.damage);
+                character.heal(this.heal);
+                break;
+            case DEFEND:
+                target.setDefense(target.getDefense() + defense);
+                break;
+            // case BUFF:
+            // player.setDamage(player.getDamage() + damage);
+            // break;
+            // case DEBUFF:
+            // player.setDamage(player.getDamage() - damage);
+            // break;
+        }
     }
 
     // Getters and Setters for each attribute
@@ -22,6 +49,14 @@ public class Abilities {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public AbilitiesType getType() {
+        return type;
+    }
+
+    public void setType(AbilitiesType type) {
+        this.type = type;
     }
 
     public int getDamage() {

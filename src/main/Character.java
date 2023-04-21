@@ -48,6 +48,21 @@ public class Character {
         }
     }
 
+    public void attack(Character opponent, int amount) {
+        int damage = amount - (int) (Math.random() * opponent.defense);
+
+        if (damage > 0) {
+            opponent.health -= damage;
+            System.out.println(this.name + " attacks " + opponent.name + " for " + damage + " damage!");
+
+            if (opponent.health <= 0) {
+                opponent.kill();
+            }
+        } else {
+            System.out.println(this.name + " attacks " + opponent.name + " but does no damage.");
+        }
+    }
+
     // Method to heal another character
     public void heal(Character target, int amount) {
         target.health += amount;

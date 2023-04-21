@@ -27,23 +27,12 @@ public class Game {
 
         int classChoice;
 
-        while (true) {
-            Colors.printColoredList("Choose your class:", new String[] {
-                    "  1. Warrior",
-                    "  2. Mage",
-                    "  3. Support",
-            });
+        List<String> list = new ArrayList<String>();
+        list.add("  1. Warrior");
+        list.add("  2. Mage");
+        list.add("  3. Support");
 
-            if (scanner.hasNextInt()) {
-                classChoice = scanner.nextInt();
-                if (classChoice >= 1 && classChoice <= 3) {
-                    break;
-                }
-            }
-
-            scanner.nextLine();
-            Colors.printColoredString(Colors.RED, "Invalid choice");
-        }
+        classChoice = SelectList.selectIntFromListScanner(scanner, "Choose you class:", list);
 
         CharacterClass characterClass = null;
         CharacterClass ai1 = null;
@@ -155,6 +144,12 @@ public class Game {
                 // HP");
             }
 
+            if (currentRoom + 1 == dungeon.size()) {
+                currentRoom++;
+                isGameOver = true;
+                break;
+            }
+
             Item item = room.generateItem();
 
             if (item != null) {
@@ -162,63 +157,40 @@ public class Game {
                         "You found a new Item!");
                 item.printStats();
 
-                int choice;
-                boolean isNextRoom = false;
+                int equipChoice;
 
-                while (!isNextRoom) {
-                    Colors.printColoredList("Do you want to equit it?", new String[] {
-                            "  1. Yes",
-                            "  2. No",
-                    });
+                List<String> list = new ArrayList<String>();
+                list.add("  1. Yes");
+                list.add("  2. No");
 
-                    if (scanner.hasNextInt()) {
-                        choice = scanner.nextInt();
-                        if (choice == 1) {
-                            int playerChoice;
+                equipChoice = SelectList.selectIntFromListScanner(scanner, "Do you want to equit it?", list);
 
-                            while (true) {
-                                Colors.printColoredString(Colors.BLUE, "Choose a player to equip the item:");
+                if (equipChoice == 1) {
+                    int playerChoice;
 
-                                for (int i = 0; i < party.getAlivePlayers().size(); i++) {
-                                    Character player = party.getAlivePlayers().get(i);
-                                    Colors.printColoredString(Colors.YELLOW,
-                                            "  " + (i + 1) + ". " + player.getName() + " ("
-                                                    + player.getHealth() + " HP)");
-                                }
+                    List<String> listPlayer = new ArrayList<String>();
 
-                                if (scanner.hasNextInt()) {
-                                    playerChoice = scanner.nextInt();
-                                    if (playerChoice >= 1 && playerChoice <= 3) {
-                                        Heros player = party.getAlivePlayers().get(playerChoice - 1);
-
-                                        player.addItemToInventory(item);
-
-                                        Colors.printColoredString(Colors.GREEN, "Item equipped!");
-
-                                        isNextRoom = true;
-                                        break;
-                                    }
-                                }
-
-                                scanner.nextLine();
-                                Colors.printColoredString(Colors.RED, "Invalid choice");
-                            }
-
-                        } else {
-                            isNextRoom = true;
-                            break;
-                        }
+                    for (int i = 0; i < party.getAlivePlayers().size(); i++) {
+                        Character player = party.getAlivePlayers().get(i);
+                        listPlayer.add("  " + (i + 1) + ". " + player.getName() + " (" + player.getHealth() + " HP)");
                     }
 
-                    scanner.nextLine();
-                    Colors.printColoredString(Colors.RED, "Invalid aachoice");
+                    playerChoice = SelectList.selectIntFromListScanner(scanner, "Choose a player to equip the item:",
+                            listPlayer);
+
+                    Heros player = party.getAlivePlayers().get(playerChoice - 1);
+
+                    player.addItemToInventory(item);
+
+                    Colors.printColoredString(Colors.GREEN, "Item equipped!");
                 }
+
             }
 
             currentRoom++;
         }
 
-        if (!isGameOver) {
+        if (isGameOver) {
             // check if the players of the party are alive
             if (party.getAlivePlayers().size() > 0) {
                 Colors.printColoredString(Colors.GREEN, "Congratulations, you finished the dungeon!");
@@ -226,32 +198,23 @@ public class Game {
                 // new game or exit
                 int choice;
 
-                while (true) {
-                    Colors.printColoredList("Do you want to play again?", new String[] {
-                            "  1. Yes",
-                            "  2. No",
-                    });
+                List<String> list = new ArrayList<String>();
+                list.add("  1. Yes");
+                list.add("  2. No");
 
-                    if (scanner.hasNextInt()) {
-                        choice = scanner.nextInt();
-                        if (choice == 1 || choice == 2) {
-                            if (choice == 1) {
-                                isGameOver = false;
-                                currentRoom = 0;
-                                party = null;
-                                dungeon = new ArrayList<>();
-                                createCharacter();
-                                createDungeon();
-                                play();
-                            } else {
-                                Colors.printColoredString(Colors.RED, "Goodbye!");
-                            }
-                            break;
-                        }
-                    }
+                choice = SelectList.selectIntFromListScanner(scanner, "Do you want to play again?", list);
 
-                    scanner.nextLine();
-                    Colors.printColoredString(Colors.RED, "Invalid choice");
+                if (choice == 1) {
+
+                    isGameOver = false;
+                    currentRoom = 0;
+                    party = null;
+                    dungeon = new ArrayList<>();
+                    createCharacter();
+                    createDungeon();
+                    play();
+                } else {
+                    Colors.printColoredString(Colors.RED, "Goodbye!");
                 }
 
             } else {

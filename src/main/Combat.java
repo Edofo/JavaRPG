@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// import main.abilities.*;
 import main.dungeon.Monster;
 import main.utils.Colors;
+import main.utils.SelectList;
 
 public class Combat {
 
@@ -24,23 +26,11 @@ public class Combat {
         int coinFlip = 0;
         int choice = 0;
 
+        List<String> list = new ArrayList<String>();
+        list.add("  1. Tails");
+        list.add("  2. Heads");
         // ask the player to choose the coin flip
-        while (true) {
-            Colors.printColoredList("Choose heads or tails to start the combat:", new String[] {
-                    "  1. Tails",
-                    "  2. Heads",
-            });
-
-            if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-                if (choice >= 1 && choice <= 2) {
-                    break;
-                }
-            }
-
-            scanner.nextLine();
-            Colors.printColoredString(Colors.RED, "Invalid choice");
-        }
+        choice = SelectList.selectIntFromListScanner(scanner, "Choose heads or tails to start the combat:", list);
 
         // get a random number between 1 and 2
         coinFlip = (int) (Math.random() * 2) + 1;
@@ -73,17 +63,17 @@ public class Combat {
             // Check if the player's turn
             if (loop % 2 == 0) {
                 // Check if the player won the coin flip
-                if (choice == coinFlip || loop > 1) {
-                    playerTurn(scanner);
-                } else {
+                if (choice == coinFlip) {
                     monsterTurn();
+                } else {
+                    playerTurn(scanner);
                 }
             } else {
-                // Check if the player lost the coin flip
-                if (choice != coinFlip || loop > 1) {
-                    monsterTurn();
-                } else {
+                // Check if the player win the coin flip
+                if (choice == coinFlip) {
                     playerTurn(scanner);
+                } else {
+                    monsterTurn();
                 }
             }
         }
@@ -98,7 +88,7 @@ public class Combat {
         Character player = selectPlayer(scanner);
 
         // Get the player's choice
-        int playerChoice = getPlayerChoice(scanner);
+        int playerChoice = getPlayerChoice(scanner, player);
 
         // Check if the player's choice is to attack
         if (playerChoice == 1) {
@@ -217,26 +207,14 @@ public class Combat {
     }
 
     // Create a method to get the player's choice
-    private int getPlayerChoice(Scanner scanner) {
-        // Print the message
+    private int getPlayerChoice(Scanner scanner, Character player) {
         int choice;
 
-        while (true) {
-            Colors.printColoredList("What do you want to do?", new String[] {
-                    "  1. Attack a monster",
-                    // " 2. Defend"
-            });
+        List<String> list = new ArrayList<String>();
+        list.add("  1. Attack a monster");
+        list.add("  2. Use abilities");
 
-            if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-                if (choice >= 1 && choice <= 2) {
-                    break;
-                }
-            }
-
-            scanner.nextLine(); // consume the invalid input
-            Colors.printColoredString(Colors.RED, "Invalid choice");
-        }
+        choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
 
         // Return the choice
         return choice;

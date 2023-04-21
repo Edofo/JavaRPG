@@ -1,5 +1,7 @@
 package main.utils;
 
+import java.util.List;
+
 public class Colors {
     // Reset
     public static final String RESET = "\033[0m"; // Text Reset
@@ -82,7 +84,7 @@ public class Colors {
         System.out.println(getColoredString(color, string));
     }
 
-    public static void printColoredList(String title, String[] list) {
+    public static void printColoredList(String title, List<String> list) {
         printColoredString(BLUE, title);
         for (String string : list) {
             printColoredString(YELLOW, string);
