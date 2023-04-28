@@ -119,8 +119,8 @@ public class Game {
             }
 
             // Code for player actions and combat
-            Combat combat = new Combat(party, room.getMonsters());
-            combat.startCombat(scanner);
+            Combat combat = new Combat(party, room.getMonsters(), scanner);
+            combat.startCombat();
 
             // Check if the party is alive
             if (party.getAlivePlayers().size() == 0) {

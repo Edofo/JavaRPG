@@ -116,4 +116,13 @@ public class Heros extends Character {
         this.characterClass = characterClass;
     }
 
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+        this.getAttack();
+        this.getDefense();
+    }
 }

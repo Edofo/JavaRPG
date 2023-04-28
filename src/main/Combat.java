@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import main.abilities.Abilities;
-import main.abilities.AbilitiesType;
+import main.abilities.*;
+
 import main.characterclass.CharacterClass;
-// import main.abilities.*;
+
 import main.dungeon.Monster;
+
+import main.item.Item;
+
 import main.utils.Colors;
 import main.utils.SelectList;
 
@@ -17,13 +20,16 @@ public class Combat {
     private Party party;
     private List<Monster> monsters;
 
-    public Combat(Party party, List<Monster> monsters) {
+    private Scanner scanner;
+
+    public Combat(Party party, List<Monster> monsters, Scanner scanner) {
         this.party = party;
         this.monsters = monsters;
+        this.scanner = scanner;
     }
 
     // Create a method to start the combat
-    public void startCombat(Scanner scanner) {
+    public void startCombat() {
         int loop = 0;
 
         int coinFlip = 0;
@@ -69,12 +75,18 @@ public class Combat {
                 if (choice == coinFlip) {
                     monsterTurn();
                 } else {
-                    playerTurn(scanner);
+                    // Print the message
+                    System.out.println("It's your turn!");
+
+                    playerTurn();
                 }
             } else {
                 // Check if the player win the coin flip
                 if (choice == coinFlip) {
-                    playerTurn(scanner);
+                    // Print the message
+                    System.out.println("It's your turn!");
+
+                    playerTurn();
                 } else {
                     monsterTurn();
                 }
@@ -83,39 +95,46 @@ public class Combat {
     }
 
     // Create a method for the player's turn
-    private void playerTurn(Scanner scanner) {
-        // Print the message
-        System.out.println("It's your turn!");
-
+    private void playerTurn() {
         // Select a player
-        Heros player = selectPlayer(scanner);
+        Heros player = selectPlayer();
 
         // Get the player's choice
-        int playerChoice = getPlayerChoice(scanner, player);
+        int playerChoice = getPlayerChoice(player);
 
         switch (playerChoice) {
+            // attack
             case 1:
                 // Get the monster's choice
-                Monster monsterChoice = selectMonster(scanner);
+                Monster monsterChoice = selectMonster();
 
                 // Deal damage to the monster
                 player.attack(monsterChoice);
                 break;
+            // use spell
             case 2:
-                Abilities abilities = selectAbilities(scanner, player);
+                Abilities abilities = selectAbilities(player);
 
                 if (abilities.getType() == AbilitiesType.HEAL || abilities.getType() == AbilitiesType.DEFEND) {
-                    Heros playerChoice2 = selectPlayer(scanner);
+                    Heros playerChoice2 = selectPlayer();
 
                     abilities.useAbilities(player, playerChoice2);
 
                     break;
                 }
 
-                Monster monsterChoice2 = selectMonster(scanner);
+                Monster monsterChoice2 = selectMonster();
 
                 abilities.useAbilities(player, monsterChoice2);
+                // use item
+            case 3:
+                Item item = selectItem(player);
 
+                break;
+            // back
+            case 4:
+                playerTurn();
+                return;
             default:
                 return;
         }
@@ -142,7 +161,7 @@ public class Combat {
     }
 
     // Create a method to select a player
-    private Heros selectPlayer(Scanner scanner) {
+    private Heros selectPlayer() {
         int choice;
 
         while (true) {
@@ -179,7 +198,7 @@ public class Combat {
             Colors.printColoredString(Colors.RED, "Invalid choice");
 
             // Get the player's choice
-            return selectPlayer(scanner);
+            return selectPlayer();
         }
 
         // Return the player
@@ -187,10 +206,12 @@ public class Combat {
     }
 
     // Create a method to get the player's choice
-    private int getPlayerChoice(Scanner scanner, Character player) {
+    private int getPlayerChoice(Character player) {
         List<String> list = new ArrayList<String>();
         list.add("  1. Attack a monster");
         list.add("  2. Use abilities");
+        list.add("  3. Use item");
+        list.add("  4. Back");
 
         int choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
 
@@ -199,7 +220,7 @@ public class Combat {
     }
 
     // Create a method to get the monster's choice
-    private Monster selectMonster(Scanner scanner) {
+    private Monster selectMonster() {
         // Print the message
         int choice;
 
@@ -237,7 +258,7 @@ public class Combat {
             Colors.printColoredString(Colors.RED, "Invalid choice");
 
             // Decrement the loop
-            selectMonster(scanner);
+            selectMonster();
         }
 
         // Return the choice
@@ -245,9 +266,7 @@ public class Combat {
     }
 
     // Create a method to get the abilities choice
-    private Abilities selectAbilities(Scanner scanner, Heros player) {
-        Abilities selectedAbilities;
-
+    private Abilities selectAbilities(Heros player) {
         CharacterClass characterClass = player.getCharacterClass();
         List<Abilities> abilities = characterClass.getAbilities();
 
@@ -259,9 +278,28 @@ public class Combat {
 
         int choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
 
-        selectedAbilities = abilities.get(choice - 1);
+        Abilities selectedAbilities = abilities.get(choice - 1);
 
         return selectedAbilities;
+    }
+
+    // Create a method to get the item choice
+    private Item selectItem(Heros player) {
+        List<Item> items = player.getInventory();
+
+        // filter to have only potion
+
+        List<String> list = new ArrayList<String>();
+
+        for (Item item : items) {
+            list.add("  " + (list.size() + 1) + ". " + item.getName());
+        }
+
+        int choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
+
+        Item selectedItem = items.get(choice - 1);
+
+        return selectedItem;
     }
 
     // Get a random monster alive
