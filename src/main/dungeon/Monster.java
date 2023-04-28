@@ -14,7 +14,7 @@ public class Monster extends Character {
     // Generate a random monster
     public static Monster generateRandomMonster() {
 
-        int TOTAL_STAT_POINTS = 30;
+        int TOTAL_STAT_POINTS = 40;
 
         String[] names = { "Goblin", "Orc", "Troll", "Dragon", "Giant" };
         int nameIndex = (int) (Math.random() * names.length);

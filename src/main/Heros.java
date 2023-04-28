@@ -3,14 +3,15 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.characterclass.CharacterClass;
 import main.item.Item;
 import main.item.ItemType;
 
 public class Heros extends Character {
-    private String characterClass;
+    private CharacterClass characterClass;
     private List<Item> inventory;
 
-    public Heros(String name, int health, int attack, int defense, String characterClass) {
+    public Heros(String name, int health, int attack, int defense, CharacterClass characterClass) {
         super(name, health, attack, defense);
         this.characterClass = characterClass;
         this.inventory = new ArrayList<>();
@@ -107,11 +108,11 @@ public class Heros extends Character {
     }
 
     // Getters and setters for each attribute
-    public String getCharacterClass() {
+    public CharacterClass getCharacterClass() {
         return characterClass;
     }
 
-    public void setCharacterClass(String characterClass) {
+    public void setCharacterClass(CharacterClass characterClass) {
         this.characterClass = characterClass;
     }
 

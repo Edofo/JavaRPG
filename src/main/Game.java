@@ -60,13 +60,13 @@ public class Game {
         }
 
         Heros player = new Heros(name, characterClass.getHealth(), characterClass.getAttack(),
-                characterClass.getDefense(), characterClass.getClass().getSimpleName());
+                characterClass.getDefense(), characterClass);
 
         Heros ai1Character = new Heros("AI1", ai1.getHealth(), ai1.getAttack(), ai1.getDefense(),
-                ai1.getClass().getSimpleName());
+                ai1);
 
         Heros ai2Character = new Heros("AI2", ai2.getHealth(), ai2.getAttack(), ai2.getDefense(),
-                ai2.getClass().getSimpleName());
+                ai2);
 
         party = new Party(player, ai1Character, ai2Character);
     }
@@ -153,8 +153,7 @@ public class Game {
             Item item = room.generateItem();
 
             if (item != null) {
-                Colors.printColoredString(Colors.GREEN,
-                        "You found a new Item!");
+                Colors.printColoredString(Colors.GREEN, "You found a new Item!");
                 item.printStats();
 
                 int equipChoice;

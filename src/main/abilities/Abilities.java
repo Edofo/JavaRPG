@@ -24,10 +24,10 @@ public class Abilities {
     public void useAbilities(Character character, Character target) {
         switch (type) {
             case HEAL:
-                character.heal(target, target.getHealth() + heal);
+                character.heal(target, heal);
                 break;
             case ATTACK:
-                character.attack(target, this.damage);
+                character.attack(target, damage);
                 character.heal(this.heal);
                 break;
             case DEFEND:
@@ -39,6 +39,9 @@ public class Abilities {
             // case DEBUFF:
             // player.setDamage(player.getDamage() - damage);
             // break;
+            default:
+                System.out.println("Invalid ability type");
+                break;
         }
     }
 

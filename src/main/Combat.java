@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import main.abilities.Abilities;
+import main.abilities.AbilitiesType;
+import main.characterclass.CharacterClass;
 // import main.abilities.*;
 import main.dungeon.Monster;
 import main.utils.Colors;
@@ -85,18 +88,41 @@ public class Combat {
         System.out.println("It's your turn!");
 
         // Select a player
-        Character player = selectPlayer(scanner);
+        Heros player = selectPlayer(scanner);
 
         // Get the player's choice
         int playerChoice = getPlayerChoice(scanner, player);
 
+        switch (playerChoice) {
+            case 1:
+                // Get the monster's choice
+                Monster monsterChoice = selectMonster(scanner);
+
+                // Deal damage to the monster
+                player.attack(monsterChoice);
+                break;
+            case 2:
+                Abilities abilities = selectAbilities(scanner, player);
+
+                if (abilities.getType() == AbilitiesType.HEAL || abilities.getType() == AbilitiesType.DEFEND) {
+                    Heros playerChoice2 = selectPlayer(scanner);
+
+                    abilities.useAbilities(player, playerChoice2);
+
+                    break;
+                }
+
+                Monster monsterChoice2 = selectMonster(scanner);
+
+                abilities.useAbilities(player, monsterChoice2);
+
+            default:
+                return;
+        }
+
         // Check if the player's choice is to attack
         if (playerChoice == 1) {
-            // Get the monster's choice
-            Monster monsterChoice = selectMonster(scanner);
 
-            // Deal damage to the monster
-            player.attack(monsterChoice);
         }
     }
 
@@ -116,7 +142,7 @@ public class Combat {
     }
 
     // Create a method to select a player
-    private Character selectPlayer(Scanner scanner) {
+    private Heros selectPlayer(Scanner scanner) {
         int choice;
 
         while (true) {
@@ -158,6 +184,18 @@ public class Combat {
 
         // Return the player
         return party.getPlayers().get(choice - 1);
+    }
+
+    // Create a method to get the player's choice
+    private int getPlayerChoice(Scanner scanner, Character player) {
+        List<String> list = new ArrayList<String>();
+        list.add("  1. Attack a monster");
+        list.add("  2. Use abilities");
+
+        int choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
+
+        // Return the choice
+        return choice;
     }
 
     // Create a method to get the monster's choice
@@ -206,18 +244,24 @@ public class Combat {
         return monster;
     }
 
-    // Create a method to get the player's choice
-    private int getPlayerChoice(Scanner scanner, Character player) {
-        int choice;
+    // Create a method to get the abilities choice
+    private Abilities selectAbilities(Scanner scanner, Heros player) {
+        Abilities selectedAbilities;
+
+        CharacterClass characterClass = player.getCharacterClass();
+        List<Abilities> abilities = characterClass.getAbilities();
 
         List<String> list = new ArrayList<String>();
-        list.add("  1. Attack a monster");
-        list.add("  2. Use abilities");
 
-        choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
+        for (Abilities abilitie : abilities) {
+            list.add("  " + (list.size() + 1) + ". " + abilitie.getName());
+        }
 
-        // Return the choice
-        return choice;
+        int choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
+
+        selectedAbilities = abilities.get(choice - 1);
+
+        return selectedAbilities;
     }
 
     // Get a random monster alive
