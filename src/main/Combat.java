@@ -139,10 +139,6 @@ public class Combat {
                 return;
         }
 
-        // Check if the player's choice is to attack
-        if (playerChoice == 1) {
-
-        }
     }
 
     // Create a method for the monster's turn
