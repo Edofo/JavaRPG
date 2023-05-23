@@ -1,6 +1,5 @@
 package main;
 
-import main.utils.*;
 import main.dungeon.*;
 import main.characterclass.*;
 import main.item.*;
@@ -172,7 +171,7 @@ public class GameUI extends JFrame implements ActionListener {
 
             // Code for player actions and combat
             Combat combat = new Combat(party, room.getMonsters());
-            // combat.startCombat();
+            combat.startCombat();
 
             // Check if the party is alive
             if (party.getAlivePlayers().size() == 0) {
@@ -253,153 +252,5 @@ public class GameUI extends JFrame implements ActionListener {
             }
         }
 
-        // while (!isGameOver) {
-        // if (currentRoom == numRooms) {
-        // isGameOver = true;
-        // break;
-        // }
-
-        // Room room = dungeon.get(currentRoom);
-
-        // Colors.printColoredString(Colors.RED_BACKGROUND_BRIGHT,
-        // "Entering room " + (currentRoom + 1) + " with monsters:");
-
-        // for (Monster monster : room.getMonsters()) {
-        // System.out.println("- " + monster.getName() + " (" + monster.getHealth() + "
-        // HP)");
-        // }
-
-        // // Code for player actions and combat
-        // Combat combat = new Combat(party, room.getMonsters());
-        // combat.startCombat(scanner);
-
-        // // Check if the party is alive
-        // if (party.getAlivePlayers().size() == 0) {
-        // isGameOver = true;
-        // break;
-        // }
-
-        // Colors.printColoredString(Colors.GREEN, "You defeated the monsters!");
-
-        // room.setClear(true);
-
-        // // heal 30% all players in the party
-        // for (Heros player : party.getAlivePlayers()) {
-        // int healthMax = player.getMaxHealth();
-
-        // int healthNew = (int) (30 * healthMax / 100);
-
-        // player.heal(healthNew);
-
-        // // System.out.println(player.getName() + " healed to " + player.getHealth() +
-        // "
-        // // HP");
-        // }
-
-        // Item item = room.generateItem();
-
-        // if (item != null) {
-        // Colors.printColoredString(Colors.GREEN,
-        // "You found a new Item!");
-        // item.printStats();
-
-        // int choice;
-        // boolean isNextRoom = false;
-
-        // while (!isNextRoom) {
-        // Colors.printColoredList("Do you want to equit it?", new String[] {
-        // " 1. Yes",
-        // " 2. No",
-        // });
-
-        // if (scanner.hasNextInt()) {
-        // choice = scanner.nextInt();
-        // if (choice == 1) {
-        // int playerChoice;
-
-        // while (true) {
-        // Colors.printColoredString(Colors.BLUE, "Choose a player to equip the item:");
-
-        // for (int i = 0; i < party.getAlivePlayers().size(); i++) {
-        // Character player = party.getAlivePlayers().get(i);
-        // Colors.printColoredString(Colors.YELLOW,
-        // " " + (i + 1) + ". " + player.getName() + " ("
-        // + player.getHealth() + " HP)");
-        // }
-
-        // if (scanner.hasNextInt()) {
-        // playerChoice = scanner.nextInt();
-        // if (playerChoice >= 1 && playerChoice <= 3) {
-        // Heros player = party.getAlivePlayers().get(playerChoice - 1);
-
-        // player.addItemToInventory(item);
-
-        // Colors.printColoredString(Colors.GREEN, "Item equipped!");
-
-        // isNextRoom = true;
-        // break;
-        // }
-        // }
-
-        // scanner.nextLine();
-        // Colors.printColoredString(Colors.RED, "Invalid choice");
-        // }
-
-        // } else {
-        // isNextRoom = true;
-        // break;
-        // }
-        // }
-
-        // scanner.nextLine();
-        // Colors.printColoredString(Colors.RED, "Invalid aachoice");
-        // }
-        // }
-
-        // currentRoom++;
-        // }
-
-        // if (!isGameOver) {
-        // // check if the players of the party are alive
-        // if (party.getAlivePlayers().size() > 0) {
-        // Colors.printColoredString(Colors.GREEN, "Congratulations, you finished the
-        // dungeon!");
-
-        // // new game or exit
-        // int choice;
-
-        // while (true) {
-        // Colors.printColoredList("Do you want to play again?", new String[] {
-        // " 1. Yes",
-        // " 2. No",
-        // });
-
-        // if (scanner.hasNextInt()) {
-        // choice = scanner.nextInt();
-        // if (choice == 1 || choice == 2) {
-        // if (choice == 1) {
-        // isGameOver = false;
-        // currentRoom = 0;
-        // party = null;
-        // dungeon = new ArrayList<>();
-        // createCharacter();
-        // createDungeon();
-        // play();
-        // } else {
-        // Colors.printColoredString(Colors.RED, "Goodbye!");
-        // }
-        // break;
-        // }
-        // }
-
-        // scanner.nextLine();
-        // Colors.printColoredString(Colors.RED, "Invalid choice");
-        // }
-
-        // } else {
-        // Colors.printColoredString(Colors.RED, "You died, game over!");
-        // }
-
-        // }
     }
 }

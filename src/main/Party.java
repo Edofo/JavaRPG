@@ -3,8 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.utils.Colors;
-
 public class Party {
     private Heros player;
     private Heros ai1;
@@ -78,7 +76,13 @@ public class Party {
     public void killPlayer(Heros player) {
         player.setHealth(0);
 
-        Colors.printColoredString(Colors.RED, player.getName() + " is dead!");
+        // if (player == this.player) {
+        // System.out.println("You died!");
+        // } else {
+        // System.out.println(player.getName() + " died!");
+        // }
+
+        // System.out.println();
     }
 
 }
