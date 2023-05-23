@@ -13,7 +13,7 @@ public class Potion extends Item {
     @Override
     public void printStats() {
         System.out.println("Name: " + this.getName());
-        System.out.println("Health restored: " + this.getStats().get(0));
+        System.out.println("Health restored: " + this.getStats().get(2));
     }
 
     // method to generate a random potion
@@ -39,7 +39,7 @@ public class Potion extends Item {
                 + Integer.parseInt(randomPotion[1]);
 
         // create a new potion with the name and the stats
-        return new Potion(randomPotion[0], List.of(randomHealthRestore, 0, 0));
+        return new Potion(randomPotion[0], List.of(0, 0, randomHealthRestore));
 
     }
 

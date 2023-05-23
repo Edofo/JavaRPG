@@ -3,6 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import main.abilities.*;
 
@@ -10,10 +11,8 @@ import main.characterclass.CharacterClass;
 
 import main.dungeon.Monster;
 
-import main.item.Item;
-
-import main.utils.Colors;
-import main.utils.SelectList;
+import main.item.*;
+import main.utils.*;
 
 public class Combat {
 
@@ -126,9 +125,22 @@ public class Combat {
                 Monster monsterChoice2 = selectMonster();
 
                 abilities.useAbilities(player, monsterChoice2);
-                // use item
+                break;
+            // use item
             case 3:
                 Item item = selectItem(player);
+
+                if (item == null) {
+                    playerTurn();
+                    return;
+                }
+
+                Heros playerChoice3 = selectPlayer();
+
+                item.useItem(playerChoice3);
+
+                // Remove the item from the player's inventory
+                player.removeItemFromInventory(item);
 
                 break;
             // back
@@ -284,6 +296,7 @@ public class Combat {
         List<Item> items = player.getInventory();
 
         // filter to have only potion
+        items = items.stream().filter(item -> item instanceof Potion).collect(Collectors.toList());
 
         List<String> list = new ArrayList<String>();
 
@@ -291,7 +304,14 @@ public class Combat {
             list.add("  " + (list.size() + 1) + ". " + item.getName());
         }
 
+        // add the back option
+        list.add("  " + (list.size() + 1) + ". Back");
+
         int choice = SelectList.selectIntFromListScanner(scanner, "What do you want to do?", list);
+
+        if (choice == list.size()) {
+            return null;
+        }
 
         Item selectedItem = items.get(choice - 1);
 
