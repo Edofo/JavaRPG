@@ -3,6 +3,7 @@ package main.item;
 import java.util.List;
 
 import main.Character;
+import main.utils.DisplayMessage;
 
 public class Item {
     private String name;
@@ -17,9 +18,9 @@ public class Item {
 
     // method to print the item's stats
     public void printStats() {
-        System.out.println("Name: " + name);
-        System.out.println("Type: " + type);
-        System.out.println(
+        DisplayMessage.outputTextArea("Name: " + name);
+        DisplayMessage.outputTextArea("Type: " + type);
+        DisplayMessage.outputTextArea(
                 "Stats: " + "Attack: " + stats.get(0) + " Defense: " + stats.get(1) + " Health: " + stats.get(2));
     }
 
@@ -50,7 +51,7 @@ public class Item {
     }
 
     public void useItem(Character character) {
-        System.out.println("Using item: " + this.getName() + this.getType() + this.getStats());
+        DisplayMessage.outputTextArea("Using item: " + this.getName() + this.getType() + this.getStats());
         if (this.getType() == ItemType.POTION) {
             if (character.getHealth() + this.getStats().get(2) > character.getMaxHealth()) {
                 character.setHealth(character.getMaxHealth());

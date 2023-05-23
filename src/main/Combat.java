@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,15 +40,11 @@ public class Combat {
         coinFlip = (int) (Math.random() * 2) + 1;
 
         // check if the player's choice is the same as the coin flip
-        // if (choice == coinFlip) {
-        // // print the message
-        // Colors.printColoredString(Colors.GREEN, "You won the coin flip! You start the
-        // combat!");
-        // } else {
-        // // print the message
-        // Colors.printColoredString(Colors.RED, "You lost the coin flip! The monsters
-        // start the combat!");
-        // }
+        if (choice == coinFlip) {
+            DisplayMessage.outputTextArea("You won the coin flip! You start the combat!");
+        } else {
+            DisplayMessage.outputTextArea("You lost the coin flip! The monsters start the combat!");
+        }
 
         // Loop until the combat is over
         while (true) {
@@ -58,7 +53,7 @@ public class Combat {
             // Check if the combat is over
             if (isCombatOver) {
                 // Print the message
-                System.out.println("Combat is over!");
+                DisplayMessage.outputTextArea("Combat is over!");
 
                 // Break the loop
                 break;
@@ -74,7 +69,7 @@ public class Combat {
                     monsterTurn();
                 } else {
                     // Print the message
-                    System.out.println("It's your turn!");
+                    DisplayMessage.outputTextArea("It's your turn!");
 
                     playerTurn();
                 }
@@ -82,7 +77,7 @@ public class Combat {
                 // Check if the player win the coin flip
                 if (choice == coinFlip) {
                     // Print the message
-                    System.out.println("It's your turn!");
+                    DisplayMessage.outputTextArea("It's your turn!");
 
                     playerTurn();
                 } else {
@@ -155,7 +150,7 @@ public class Combat {
     // Create a method for the monster's turn
     private void monsterTurn() {
         // Print the message
-        System.out.println("It's the monster's turn!");
+        DisplayMessage.outputTextArea("It's the monster's turn!");
 
         // Get a random monster alive
         Monster monster = getRandomMonsterAlive();
@@ -176,7 +171,7 @@ public class Combat {
         List<Heros> players = party.getPlayers().stream().filter(player -> player.getHealth() > 0)
                 .collect(Collectors.toList());
 
-        Collections.reverse(players);
+        // Collections.reverse(players);
 
         for (int i = 0; i < players.size(); i++) {
             String value = players.get(i).getName() + " (" + players.get(i).getHealth() + " HP)";
@@ -194,7 +189,7 @@ public class Combat {
         // Check if the player's choice is valid
         if (player.getHealth() <= 0) {
             // Print the message
-            // Colors.printColoredString(Colors.RED, "Invalid choice");
+            DisplayMessage.outputTextArea("Invalid choice");
 
             // Get the player's choice
             return selectPlayer();
@@ -213,8 +208,6 @@ public class Combat {
         list.add("Back");
 
         int choice = SelectList.selectIntFromList("What do you want to do?", list);
-
-        System.out.println(choice);
 
         // Return the choice
         return choice;
@@ -326,7 +319,7 @@ public class Combat {
         List<Heros> playersDead = party.getDeadPlayers();
 
         if (playersDead.size() == party.getPlayers().size()) {
-            // Colors.printColoredString(Colors.RED, "The players are dead!");
+            DisplayMessage.outputTextArea("The players are dead!");
         } else {
             isPlayerDead = false;
         }
@@ -339,7 +332,9 @@ public class Combat {
             }
         }
 
-        // Colors.printColoredString(Colors.GREEN, "The monsters are dead!");
+        if (isMonsterDead) {
+            DisplayMessage.outputTextArea("The monsters are dead!");
+        }
 
         // Return the result
         if (isPlayerDead || isMonsterDead) {

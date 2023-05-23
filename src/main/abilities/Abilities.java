@@ -1,6 +1,7 @@
 package main.abilities;
 
 import main.Character;
+import main.utils.DisplayMessage;
 
 public class Abilities {
     private String name;
@@ -40,7 +41,7 @@ public class Abilities {
             // player.setDamage(player.getDamage() - damage);
             // break;
             default:
-                System.out.println("Invalid ability type");
+                DisplayMessage.outputTextArea("Invalid ability type");
                 break;
         }
     }

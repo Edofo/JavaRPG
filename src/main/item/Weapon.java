@@ -2,6 +2,9 @@ package main.item;
 
 import java.util.List;
 import java.util.Random;
+
+import main.utils.DisplayMessage;
+
 import java.util.ArrayList;
 
 public class Weapon extends Item {
@@ -12,8 +15,8 @@ public class Weapon extends Item {
     // Method to print the weapon's stats
     @Override
     public void printStats() {
-        System.out.println("Name: " + this.getName());
-        System.out.println("Attack: " + this.getStats().get(0));
+        DisplayMessage.outputTextArea("Name: " + this.getName());
+        DisplayMessage.outputTextArea("Attack: " + this.getStats().get(0));
     }
 
     // method to generate a random weapon

@@ -2,9 +2,6 @@ package main.dungeon;
 
 import main.Character;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Monster extends Character {
 
     public Monster(String name, int health, int attack, int defense) {
@@ -33,17 +30,6 @@ public class Monster extends Character {
         int defense = TOTAL_STAT_POINTS;
 
         return new Monster(name, health, attack, defense);
-    }
-
-    // Generate a random list of monsters
-    public static List<Monster> generateRandomMonsterList(int numberOfMonsters) {
-        List<Monster> monsters = new ArrayList<>();
-
-        for (int i = 0; i < numberOfMonsters; i++) {
-            monsters.add(generateRandomMonster());
-        }
-
-        return monsters;
     }
 
 }

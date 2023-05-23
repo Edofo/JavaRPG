@@ -3,6 +3,7 @@ package main;
 import main.dungeon.*;
 import main.characterclass.*;
 import main.item.*;
+import main.utils.DisplayMessage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,6 +41,8 @@ public class GameUI extends JFrame implements ActionListener {
         startButton.addActionListener(this);
         outputTextArea = new JTextArea(10, 30);
         outputTextArea.setEditable(false);
+
+        DisplayMessage.setOutputTextArea(outputTextArea);
 
         // Set up the layout
         JPanel inputPanel = new JPanel(new GridLayout(0, 2));
@@ -139,10 +142,9 @@ public class GameUI extends JFrame implements ActionListener {
 
                 dungeon.add(room);
             } else {
-                // generate random number of monsters between 1 and 3
-                int numMonsters = (int) (Math.random() * 3) + 1;
+                Room room = Room.generateRoom();
 
-                List<Monster> monsters = Monster.generateRandomMonsterList(numMonsters);
+                List<Monster> monsters = room.getMonsters();
 
                 dungeon.add(new Room(monsters.toArray(new Monster[0])));
             }
@@ -248,6 +250,7 @@ public class GameUI extends JFrame implements ActionListener {
                 dungeon.clear();
                 startGame();
             } else {
+
                 System.exit(0);
             }
         }

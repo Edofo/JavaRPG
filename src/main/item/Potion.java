@@ -2,6 +2,9 @@ package main.item;
 
 import java.util.List;
 import java.util.Random;
+
+import main.utils.DisplayMessage;
+
 import java.util.ArrayList;
 
 public class Potion extends Item {
@@ -12,8 +15,8 @@ public class Potion extends Item {
     // Method to print the potion's stats
     @Override
     public void printStats() {
-        System.out.println("Name: " + this.getName());
-        System.out.println("Health restored: " + this.getStats().get(2));
+        DisplayMessage.outputTextArea("Name: " + this.getName());
+        DisplayMessage.outputTextArea("Health restored: " + this.getStats().get(2));
     }
 
     // method to generate a random potion

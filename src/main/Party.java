@@ -3,6 +3,8 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.utils.DisplayMessage;
+
 public class Party {
     private Heros player;
     private Heros ai1;
@@ -76,13 +78,13 @@ public class Party {
     public void killPlayer(Heros player) {
         player.setHealth(0);
 
-        // if (player == this.player) {
-        // System.out.println("You died!");
-        // } else {
-        // System.out.println(player.getName() + " died!");
-        // }
+        if (player == this.player) {
+            DisplayMessage.outputTextArea("You died!");
+        } else {
+            DisplayMessage.outputTextArea(player.getName() + " died!");
+        }
 
-        // System.out.println();
+        DisplayMessage.outputTextArea(player.getName() + " has been dead");
     }
 
 }

@@ -1,5 +1,6 @@
 package main.dungeon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.item.*;
@@ -11,6 +12,19 @@ public class Room {
     public Room(Monster... monsters) {
         this.monsters = List.of(monsters);
         this.isCleared = false;
+    }
+
+    public static Room generateRoom() {
+        int numberOfMonsters = (int) (Math.random() * 3) + 1;
+
+        List<Monster> monsters = new ArrayList<>();
+
+        for (int i = 0; i < numberOfMonsters; i++) {
+            // Generate a random monster
+            monsters.add(Monster.generateRandomMonster());
+        }
+
+        return new Room(monsters.toArray(new Monster[0]));
     }
 
     // Method to check if the room has a boss

@@ -6,6 +6,7 @@ import java.util.List;
 import main.characterclass.CharacterClass;
 import main.item.Item;
 import main.item.ItemType;
+import main.utils.DisplayMessage;
 
 public class Heros extends Character {
     private CharacterClass characterClass;
@@ -93,17 +94,19 @@ public class Heros extends Character {
 
     // Method to print the character's inventory
     public void printInventory() {
-        System.out.println("Inventory:");
+        DisplayMessage.outputTextArea("Inventory:");
         for (Item item : inventory) {
             // check if the item is a potion
             // if (item.getType() == ItemType.POTION) {
-            // System.out.println(item.getName() + " - " + item.getStats().get(0) + "
+            // DisplayMessage.outputTextArea(item.getName() + " - " + item.getStats().get(0)
+            // + "
             // health");
             // } else {
-            // System.out.println(item.getName() + " - " + item.getStats().get(0) + "
+            // DisplayMessage.outputTextArea(item.getName() + " - " + item.getStats().get(0)
+            // + "
             // attack, " + item.getStats().get(1) + " defense");
             // }
-            System.out.println("- " + item.getName());
+            DisplayMessage.outputTextArea("- " + item.getName());
         }
     }
 

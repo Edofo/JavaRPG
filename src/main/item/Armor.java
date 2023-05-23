@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import main.utils.DisplayMessage;
+
 public class Armor extends Item {
     public Armor(String name, List<Integer> stats) {
         super(name, ItemType.ARMOR, stats);
@@ -12,8 +14,8 @@ public class Armor extends Item {
     // Method to print the armor's stats
     @Override
     public void printStats() {
-        System.out.println("Name: " + this.getName());
-        System.out.println("Defense: " + this.getStats().get(0));
+        DisplayMessage.outputTextArea("Name: " + this.getName());
+        DisplayMessage.outputTextArea("Defense: " + this.getStats().get(0));
     }
 
     // Method to generate a random armor
