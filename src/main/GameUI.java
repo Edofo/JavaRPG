@@ -3,27 +3,30 @@ package main;
 import main.dungeon.*;
 import main.characterclass.*;
 import main.item.*;
-import main.utils.DisplayMessage;
+import main.utils.*;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameUI extends JFrame implements ActionListener {
 
     private JLabel nameLabel;
-    private JTextField nameTextField;
+    private static JTextField nameTextField;
     private JLabel classLabel;
-    private JComboBox<String> classComboBox;
+    private static JComboBox<String> classComboBox;
     private JButton startButton;
-    private JTextArea outputTextArea;
+    private static JTextArea outputTextArea;
 
-    private ArrayList<Room> dungeon = new ArrayList<>();
-    private boolean isGameOver = false;
-    private Party party;
+    private static Dungeon dungeon;
+    private static Party party;
+
+    private static boolean gameStopped;
 
     public GameUI() {
         super("Dungeon Game");
@@ -78,7 +81,8 @@ public class GameUI extends JFrame implements ActionListener {
         }
     }
 
-    public void startGame() {
+    public static void startGame() {
+        gameStopped = false;
         // Get the user's input
         String name = nameTextField.getText();
         String selectedClass = (String) classComboBox.getSelectedItem();
@@ -122,54 +126,25 @@ public class GameUI extends JFrame implements ActionListener {
 
         party = new Party(player, ai1Character, ai2Character);
 
-        createDungeon();
+        dungeon = Dungeon.generateRandomDungeon();
+
+        outputTextArea.append("Dungeon generated!\n");
 
         play();
     }
 
-    public void createDungeon() {
-        // generate random number of rooms between 5 and 10
-        int numRooms = (int) (Math.random() * 6) + 5;
+    public static void play() {
+        int numRooms = dungeon.getRooms().size();
 
-        outputTextArea.append("Generating dungeon with " + numRooms + " rooms...\n");
+        for (int currentRoom = 0; currentRoom < numRooms; currentRoom++) {
 
-        for (int i = 0; i < numRooms; i++) {
-            // check if the room is the last room
-            if (i == numRooms - 1) {
-                Boss boss = Boss.generateRandomBoss();
-
-                Room room = new Room(boss);
-
-                dungeon.add(room);
-            } else {
-                Room room = Room.generateRoom();
-
-                List<Monster> monsters = room.getMonsters();
-
-                dungeon.add(new Room(monsters.toArray(new Monster[0])));
-            }
-        }
-
-        outputTextArea.append("Dungeon generated!\n");
-    }
-
-    public void play() {
-        int currentRoom = 0;
-        int numRooms = dungeon.size();
-
-        while (!isGameOver) {
-            if (currentRoom == numRooms) {
-                isGameOver = true;
-                break;
+            if (gameStopped) {
+                break; // Exit the loop if the game is stopped
             }
 
-            Room room = dungeon.get(currentRoom);
+            Room room = dungeon.getRoom(currentRoom);
 
-            outputTextArea.append("Entering room " + (currentRoom + 1) + " with monsters:\n");
-
-            for (Monster monster : room.getMonsters()) {
-                outputTextArea.append("- " + monster.getName() + " (" + monster.getHealth() + " HP)\n");
-            }
+            room.enterRoom(currentRoom);
 
             // Code for player actions and combat
             Combat combat = new Combat(party, room.getMonsters());
@@ -177,7 +152,7 @@ public class GameUI extends JFrame implements ActionListener {
 
             // Check if the party is alive
             if (party.getAlivePlayers().size() == 0) {
-                isGameOver = true;
+                currentRoom = numRooms;
                 break;
             }
 
@@ -209,15 +184,15 @@ public class GameUI extends JFrame implements ActionListener {
                     List<Heros> alivePlayers = party.getAlivePlayers();
 
                     // get names of alive players
-                    String[] playerNames = new String[alivePlayers.size()];
-                    for (int i = 0; i < alivePlayers.size(); i++) {
-                        playerNames[i] = alivePlayers.get(i).getName();
+                    List<String> playerNames = new ArrayList<>();
+
+                    for (Heros player : alivePlayers) {
+                        playerNames.add(player.getName());
                     }
 
-                    int playerChoice = JOptionPane.showOptionDialog(null,
-                            "Which player should pick up the " + item.getName() + "?", "Pick up item\n",
-                            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                            playerNames, null);
+                    // get the player's choice
+                    int playerChoice = SelectList.selectIntFromList("Select a player do you want to equip",
+                            playerNames);
 
                     Heros player = party.getAlivePlayers().get(playerChoice);
 
@@ -230,29 +205,35 @@ public class GameUI extends JFrame implements ActionListener {
                 }
             }
 
-            currentRoom++;
         }
 
-        if (isGameOver) {
-            // check if the players of the party are alive
-            if (party.getAlivePlayers().size() == 0) {
-                outputTextArea.append("You died! Game over!\n");
-            } else {
-                outputTextArea.append("You defeated the dungeon! You win!\n");
-            }
+        // check if the players of the party are alive
+        if (party.getAlivePlayers().size() == 0) {
+            outputTextArea.append("You died! Game over!\n");
+        } else {
+            outputTextArea.append("You defeated the dungeon! You win!\n");
+        }
 
-            // new game or exit
-            int choice = JOptionPane.showConfirmDialog(null, "Do you want to play again?", "Play again?\n",
-                    JOptionPane.YES_NO_OPTION);
+        if (!gameStopped) {
+            stopGame();
+        }
 
-            if (choice == JOptionPane.YES_OPTION) {
-                isGameOver = false;
-                dungeon.clear();
-                startGame();
-            } else {
+    }
 
-                System.exit(0);
-            }
+    // method to stop the game
+    public static void stopGame() {
+        gameStopped = true;
+
+        outputTextArea.append("Game stopped!\n");
+
+        // new game or exit
+        int choice = JOptionPane.showConfirmDialog(null, "Do you want to play again?", "Play again?\n",
+                JOptionPane.YES_NO_OPTION);
+
+        if (choice == JOptionPane.YES_OPTION) {
+            startGame();
+        } else {
+            System.exit(0);
         }
 
     }

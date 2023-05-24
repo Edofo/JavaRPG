@@ -20,20 +20,6 @@ public class Character {
         this.defense = defense;
     }
 
-    // Method to print the character's stats
-    public void printStats() {
-        DisplayMessage.outputTextArea("Name: " + this.name);
-        DisplayMessage.outputTextArea("Health: " + this.health + "/" + this.maxHealth + " ("
-                + (int) ((double) this.health / this.maxHealth * 100) + "%)");
-        DisplayMessage.outputTextArea("Attack: " + this.attack);
-        DisplayMessage.outputTextArea("Defense: " + this.defense);
-    }
-
-    // Method to print the character's name
-    public void printName() {
-        DisplayMessage.outputTextArea("Name: " + this.name);
-    }
-
     // Method to attack another character
     public void attack(Character opponent) {
         int damage = this.attack - (int) (Math.random() * opponent.defense);

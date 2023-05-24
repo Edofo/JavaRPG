@@ -4,7 +4,7 @@ import javax.swing.JTextArea;
 
 public class DisplayMessage {
 
-    public static JTextArea outputTextArea;
+    private static JTextArea outputTextArea;
 
     public static void setOutputTextArea(JTextArea outputTextArea) {
         DisplayMessage.outputTextArea = outputTextArea;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.characterclass.CharacterClass;
+
 import main.item.Item;
 import main.item.ItemType;
-import main.utils.DisplayMessage;
 
 public class Heros extends Character {
     private CharacterClass characterClass;
@@ -89,24 +89,6 @@ public class Heros extends Character {
             // remove the item's stats from the character's stats
             this.getAttack();
             this.getDefense();
-        }
-    }
-
-    // Method to print the character's inventory
-    public void printInventory() {
-        DisplayMessage.outputTextArea("Inventory:");
-        for (Item item : inventory) {
-            // check if the item is a potion
-            // if (item.getType() == ItemType.POTION) {
-            // DisplayMessage.outputTextArea(item.getName() + " - " + item.getStats().get(0)
-            // + "
-            // health");
-            // } else {
-            // DisplayMessage.outputTextArea(item.getName() + " - " + item.getStats().get(0)
-            // + "
-            // attack, " + item.getStats().get(1) + " defense");
-            // }
-            DisplayMessage.outputTextArea("- " + item.getName());
         }
     }
 

@@ -171,8 +171,6 @@ public class Combat {
         List<Heros> players = party.getPlayers().stream().filter(player -> player.getHealth() > 0)
                 .collect(Collectors.toList());
 
-        // Collections.reverse(players);
-
         for (int i = 0; i < players.size(); i++) {
             String value = players.get(i).getName() + " (" + players.get(i).getHealth() + " HP)";
             if (players.get(i).getHealth() > 0) {
@@ -184,7 +182,7 @@ public class Combat {
 
         choice = SelectList.selectIntFromList("Which player do you want to use?", list);
 
-        Character player = party.getPlayers().get(choice - 1);
+        Character player = players.get(choice - 1);
 
         // Check if the player's choice is valid
         if (player.getHealth() <= 0) {
