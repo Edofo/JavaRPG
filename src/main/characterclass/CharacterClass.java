@@ -2,14 +2,16 @@ package main.characterclass;
 
 import java.util.List;
 
+import main.abilities.Abilities;
+
 public class CharacterClass {
 
     private int health;
     private int attack;
     private int defense;
-    private List<String> abilities;
+    private List<Abilities> abilities;
 
-    public CharacterClass(int health, int attack, int defense, List<String> abilities) {
+    public CharacterClass(int health, int attack, int defense, List<Abilities> abilities) {
         this.health = health;
         this.attack = attack;
         this.defense = defense;
@@ -41,22 +43,12 @@ public class CharacterClass {
         this.defense = defense;
     }
 
-    public List<String> getAbilities() {
+    public List<Abilities> getAbilities() {
         return abilities;
     }
 
-    public void setAbilities(List<String> abilities) {
+    public void setAbilities(List<Abilities> abilities) {
         this.abilities = abilities;
-    }
-
-    @Override
-    public String toString() {
-        return "CharacterClass{" +
-                "health=" + health +
-                ", attack=" + attack +
-                ", defense=" + defense +
-                ", abilities=" + abilities +
-                '}';
     }
 
 }

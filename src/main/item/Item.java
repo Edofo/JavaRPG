@@ -2,6 +2,9 @@ package main.item;
 
 import java.util.List;
 
+import main.Character;
+import main.utils.DisplayMessage;
+
 public class Item {
     private String name;
     private ItemType type;
@@ -11,14 +14,6 @@ public class Item {
         this.name = name;
         this.type = type;
         this.stats = stats;
-    }
-
-    // method to print the item's stats
-    public void printStats() {
-        System.out.println("Name: " + name);
-        System.out.println("Type: " + type);
-        System.out.println(
-                "Stats: " + "Attack: " + stats.get(0) + " Defense: " + stats.get(1) + " Health: " + stats.get(2));
     }
 
     // Method to get random Weapon
@@ -45,6 +40,26 @@ public class Item {
         }
 
         return item;
+    }
+
+    public void useItem(Character character) {
+        DisplayMessage.outputTextArea("Using item: " + this.getName() + this.getType() + this.getStats());
+        if (this.getType() == ItemType.POTION) {
+            if (character.getHealth() + this.getStats().get(2) > character.getMaxHealth()) {
+                character.setHealth(character.getMaxHealth());
+            } else {
+                character.setHealth(character.getHealth() + this.getStats().get(2));
+            }
+
+        }
+
+        // if (item.getType() == ItemType.WEAPON) {
+        // character.setAttack(character.getAttack() + item.getStats().get(0));
+        // }
+
+        // if (item.getType() == ItemType.ARMOR) {
+        // character.setDefense(character.getDefense() + item.getStats().get(1));
+        // }
     }
 
     // Getters and setters for each attribute

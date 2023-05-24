@@ -1,5 +1,7 @@
 package main;
 
+import main.utils.DisplayMessage;
+
 public class Character {
 
     private String name;
@@ -18,33 +20,34 @@ public class Character {
         this.defense = defense;
     }
 
-    // Method to print the character's stats
-    public void printStats() {
-        System.out.println("Name: " + this.name);
-        System.out.println("Health: " + this.health + "/" + this.maxHealth + " ("
-                + (int) ((double) this.health / this.maxHealth * 100) + "%)");
-        System.out.println("Attack: " + this.attack);
-        System.out.println("Defense: " + this.defense);
-    }
-
-    // Method to print the character's name
-    public void printName() {
-        System.out.println("Name: " + this.name);
-    }
-
     // Method to attack another character
     public void attack(Character opponent) {
         int damage = this.attack - (int) (Math.random() * opponent.defense);
 
         if (damage > 0) {
             opponent.health -= damage;
-            System.out.println(this.name + " attacks " + opponent.name + " for " + damage + " damage!");
+            DisplayMessage.outputTextArea(this.name + " attacks " + opponent.name + " for " + damage + " damage!");
 
             if (opponent.health <= 0) {
                 opponent.kill();
             }
         } else {
-            System.out.println(this.name + " attacks " + opponent.name + " but does no damage.");
+            DisplayMessage.outputTextArea(this.name + " attacks " + opponent.name + " but does no damage.");
+        }
+    }
+
+    public void attack(Character opponent, int amount) {
+        int damage = amount - (int) (Math.random() * opponent.defense);
+
+        if (damage > 0) {
+            opponent.health -= damage;
+            DisplayMessage.outputTextArea(this.name + " attacks " + opponent.name + " for " + damage + " damage!");
+
+            if (opponent.health <= 0) {
+                opponent.kill();
+            }
+        } else {
+            DisplayMessage.outputTextArea(this.name + " attacks " + opponent.name + " but does no damage.");
         }
     }
 
@@ -54,7 +57,7 @@ public class Character {
         if (target.health > target.maxHealth) {
             target.health = target.maxHealth;
         }
-        System.out.println(this.name + " heals " + target.name + " for " + amount + " health!");
+        DisplayMessage.outputTextArea(this.name + " heals " + target.name + " for " + amount + " health!");
     }
 
     // heal self
@@ -63,7 +66,7 @@ public class Character {
         if (this.health > this.maxHealth) {
             this.health = this.maxHealth;
         }
-        // System.out.println(this.name + " heals for " + amount + " health!");
+        DisplayMessage.outputTextArea(this.name + " heals for " + amount + " health!");
     }
 
     // Method to check if a character is alive
@@ -78,7 +81,7 @@ public class Character {
     // Method to kill a character
     public void kill() {
         this.health = 0;
-        System.out.println(this.name + " has died!");
+        DisplayMessage.outputTextArea(this.name + " has died!");
     }
 
     // Getters and setters for each attribute :

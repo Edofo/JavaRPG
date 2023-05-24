@@ -3,14 +3,16 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.characterclass.CharacterClass;
+
 import main.item.Item;
 import main.item.ItemType;
 
 public class Heros extends Character {
-    private String characterClass;
+    private CharacterClass characterClass;
     private List<Item> inventory;
 
-    public Heros(String name, int health, int attack, int defense, String characterClass) {
+    public Heros(String name, int health, int attack, int defense, CharacterClass characterClass) {
         super(name, health, attack, defense);
         this.characterClass = characterClass;
         this.inventory = new ArrayList<>();
@@ -90,29 +92,22 @@ public class Heros extends Character {
         }
     }
 
-    // Method to print the character's inventory
-    public void printInventory() {
-        System.out.println("Inventory:");
-        for (Item item : inventory) {
-            // check if the item is a potion
-            // if (item.getType() == ItemType.POTION) {
-            // System.out.println(item.getName() + " - " + item.getStats().get(0) + "
-            // health");
-            // } else {
-            // System.out.println(item.getName() + " - " + item.getStats().get(0) + "
-            // attack, " + item.getStats().get(1) + " defense");
-            // }
-            System.out.println("- " + item.getName());
-        }
-    }
-
     // Getters and setters for each attribute
-    public String getCharacterClass() {
+    public CharacterClass getCharacterClass() {
         return characterClass;
     }
 
-    public void setCharacterClass(String characterClass) {
+    public void setCharacterClass(CharacterClass characterClass) {
         this.characterClass = characterClass;
     }
 
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+        this.getAttack();
+        this.getDefense();
+    }
 }

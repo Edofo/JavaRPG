@@ -1,6 +1,6 @@
 package main.dungeon;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class Boss extends Monster {
@@ -12,17 +12,26 @@ public class Boss extends Monster {
     public static Boss generateRandomBoss() {
         Random random = new Random();
 
-        HashMap<Integer, Boss> bosses = new HashMap<>();
+        List<String> bossNames = List.of(
+                "Evil Wizard",
+                "Evil King",
+                "Evil Queen",
+                "Evil Prince",
+                "Evil Princess",
+                "Evil Duke");
 
-        bosses.put(0, new Boss("Evil Wizard", 50, 40, 15));
-        bosses.put(1, new Boss("Evil King", 100, 20, 30));
-        bosses.put(2, new Boss("Evil Queen", 75, 30, 25));
-        bosses.put(3, new Boss("Evil Prince", 65, 25, 25));
-        bosses.put(4, new Boss("Evil Princess", 55, 35, 20));
-        bosses.put(5, new Boss("Evil Duke", 90, 15, 35));
+        List<Integer> bossStats1 = List.of(50, 100, 75, 65, 55, 90);
+        List<Integer> bossStats2 = List.of(40, 20, 30, 25, 35, 15);
+        List<Integer> bossStats3 = List.of(15, 30, 25, 25, 20, 35);
 
-        int randomInt = random.nextInt(bosses.size());
+        int randomIndex = random.nextInt(bossNames.size());
 
-        return bosses.get(randomInt);
+        String bossName = bossNames.get(randomIndex);
+        int stat1 = bossStats1.get(randomIndex);
+        int stat2 = bossStats2.get(randomIndex);
+        int stat3 = bossStats3.get(randomIndex);
+
+        return new Boss(bossName, stat1, stat2, stat3);
     }
+
 }

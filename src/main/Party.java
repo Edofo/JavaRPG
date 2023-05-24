@@ -3,8 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.utils.Colors;
-
 public class Party {
     private Heros player;
     private Heros ai1;
@@ -72,13 +70,6 @@ public class Party {
         int randomIndex = (int) (Math.random() * alivePlayers.size());
 
         return alivePlayers.get(randomIndex);
-    }
-
-    // kill player
-    public void killPlayer(Heros player) {
-        player.setHealth(0);
-
-        Colors.printColoredString(Colors.RED, player.getName() + " is dead!");
     }
 
 }
