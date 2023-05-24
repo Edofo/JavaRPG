@@ -2,7 +2,7 @@ package main.utils;
 
 import javax.swing.JOptionPane;
 
-import main.GameUI;
+import main.game.Game;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class SelectList {
 
         // If the user cancels the input or closes the dialog, return null
         if (input == null) {
-            GameUI.stopGame();
+            Game.stopGame();
             return null;
         }
 
@@ -35,5 +35,19 @@ public class SelectList {
 
         // Return 0 for invalid choices
         return 0;
+    }
+
+    public static Integer yesOrNo(String title, String message) {
+        // Show the selection dialog
+        int input = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+
+        // If the user cancels the input or closes the dialog, return null
+        if (input == JOptionPane.CLOSED_OPTION) {
+            Game.stopGame();
+            return null;
+        }
+
+        // Return 1 for yes, 2 for no
+        return input;
     }
 }
