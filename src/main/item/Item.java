@@ -16,14 +16,6 @@ public class Item {
         this.stats = stats;
     }
 
-    // method to print the item's stats
-    public void printStats() {
-        DisplayMessage.outputTextArea("Name: " + name);
-        DisplayMessage.outputTextArea("Type: " + type);
-        DisplayMessage.outputTextArea(
-                "Stats: " + "Attack: " + stats.get(0) + " Defense: " + stats.get(1) + " Health: " + stats.get(2));
-    }
-
     // Method to get random Weapon
     public static Item getRandomItem() {
 
