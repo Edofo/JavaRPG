@@ -160,6 +160,11 @@ public class GameUI extends JFrame implements ActionListener {
 
             room.setClear(true);
 
+            if (dungeon.isCleared()) {
+                // outputTextArea.append("You cleared the dungeon!\n");
+                break;
+            }
+
             // heal 30% all players in the party
             for (Heros player : party.getAlivePlayers()) {
                 int healthMax = player.getMaxHealth();
@@ -231,7 +236,7 @@ public class GameUI extends JFrame implements ActionListener {
                 JOptionPane.YES_NO_OPTION);
 
         if (choice == JOptionPane.YES_OPTION) {
-            startGame();
+            // startGame();
         } else {
             System.exit(0);
         }

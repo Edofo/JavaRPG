@@ -36,6 +36,12 @@ public class Combat {
         // ask the player to choose the coin flip
         choice = SelectList.selectIntFromList("Choose heads or tails to start the combat:", list);
 
+        if (choice == 1) {
+            DisplayMessage.outputTextArea("You chose heads!");
+        } else {
+            DisplayMessage.outputTextArea("You chose tails!");
+        }
+
         // get a random number between 1 and 2
         coinFlip = (int) (Math.random() * 2) + 1;
 

@@ -17,6 +17,8 @@ public class SelectList {
         String input = (String) JOptionPane.showInputDialog(null, title, "Select", JOptionPane.QUESTION_MESSAGE,
                 null, listArray, listArray[0]);
 
+        // System.out.println(input);
+
         // If the user cancels the input or closes the dialog, return null
         if (input == null) {
             GameUI.stopGame();
