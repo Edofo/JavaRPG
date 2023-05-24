@@ -194,7 +194,7 @@ public class GameUI extends JFrame implements ActionListener {
                     int playerChoice = SelectList.selectIntFromList("Select a player do you want to equip",
                             playerNames);
 
-                    Heros player = party.getAlivePlayers().get(playerChoice);
+                    Heros player = party.getAlivePlayers().get(playerChoice - 1);
 
                     player.addItemToInventory(item);
 

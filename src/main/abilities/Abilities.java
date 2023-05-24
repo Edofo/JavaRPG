@@ -87,14 +87,4 @@ public class Abilities {
         this.defense = defense;
     }
 
-    @Override
-    public String toString() {
-        return "Abilities{" +
-                "name='" + name + '\'' +
-                ", damage=" + damage +
-                ", heal=" + heal +
-                ", defense=" + defense +
-                '}';
-    }
-
 }

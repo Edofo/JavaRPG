@@ -1,26 +1,23 @@
 package main.utils;
 
-import java.util.List;
-
 import javax.swing.JOptionPane;
 
 import main.GameUI;
+
+import java.util.List;
 
 public class SelectList {
 
     public static Integer selectIntFromList(String title, List<String> list) {
 
-        // Create a string array of the list
-        String[] listArray = new String[list.size()];
-        listArray = list.toArray(listArray);
+        // Create an array of the list
+        String[] listArray = list.toArray(new String[0]);
 
-        // Get user input
+        // Show the selection dialog
         String input = (String) JOptionPane.showInputDialog(null, title, "Select", JOptionPane.QUESTION_MESSAGE,
                 null, listArray, listArray[0]);
 
-        System.out.println("Input: " + input);
-
-        // If the user cancels the input, return null
+        // If the user cancels the input or closes the dialog, return null
         if (input == null) {
             GameUI.stopGame();
             return null;
@@ -29,22 +26,12 @@ public class SelectList {
         // Get the index of the user's selection
         int choice = list.indexOf(input) + 1;
 
-        System.out.println("Choice: " + choice + " Selection: " + input + " List length: " + list.size());
-
-        // print list
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i));
-        }
-
+        // Check if the choice is within the valid range
         if (choice >= 1 && choice <= list.size()) {
             return choice;
         }
 
-        // check if choice was cancelled
-        if (choice == 0) {
-            return 0;
-        }
-
+        // Return 0 for invalid choices
         return 0;
     }
 }

@@ -1,9 +1,9 @@
 package main.dungeon;
 
+import main.utils.DisplayMessage;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import main.utils.DisplayMessage;
 
 public class Dungeon {
     private String name;
@@ -20,18 +20,15 @@ public class Dungeon {
 
         // Generate a random number of rooms between 5 and 10
         int numberOfRooms = (int) (Math.random() * 5) + 5;
+        // int numberOfRooms = 1;
 
-        List<Room> rooms = new ArrayList<Room>();
+        List<Room> rooms = new ArrayList<>(numberOfRooms);
 
         DisplayMessage.outputTextArea("Generating dungeon with " + numberOfRooms + " rooms");
 
         for (int i = 0; i < numberOfRooms; i++) {
             // Generate a random room
-            if (i == numberOfRooms - 1) {
-                rooms.add(Room.generateRoom(true));
-            } else {
-                rooms.add(Room.generateRoom(false));
-            }
+            rooms.add(i == numberOfRooms - 1 ? Room.generateRoom(true) : Room.generateRoom(false));
         }
 
         return new Dungeon("Dungeon", rooms);

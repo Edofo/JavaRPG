@@ -51,14 +51,4 @@ public class CharacterClass {
         this.abilities = abilities;
     }
 
-    @Override
-    public String toString() {
-        return "CharacterClass{" +
-                "health=" + health +
-                ", attack=" + attack +
-                ", defense=" + defense +
-                ", abilities=" + abilities +
-                '}';
-    }
-
 }

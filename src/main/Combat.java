@@ -282,10 +282,6 @@ public class Combat {
 
         int choice = SelectList.selectIntFromList("What do you want to do?", list);
 
-        if (choice == list.size()) {
-            return null;
-        }
-
         Item selectedItem = items.get(choice - 1);
 
         return selectedItem;

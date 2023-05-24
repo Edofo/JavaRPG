@@ -3,8 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.utils.DisplayMessage;
-
 public class Party {
     private Heros player;
     private Heros ai1;
@@ -72,19 +70,6 @@ public class Party {
         int randomIndex = (int) (Math.random() * alivePlayers.size());
 
         return alivePlayers.get(randomIndex);
-    }
-
-    // kill player
-    public void killPlayer(Heros player) {
-        player.setHealth(0);
-
-        if (player == this.player) {
-            DisplayMessage.outputTextArea("You died!");
-        } else {
-            DisplayMessage.outputTextArea(player.getName() + " died!");
-        }
-
-        DisplayMessage.outputTextArea(player.getName() + " has been dead");
     }
 
 }

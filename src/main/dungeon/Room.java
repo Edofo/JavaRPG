@@ -1,10 +1,11 @@
 package main.dungeon;
 
+import main.item.Item;
+import main.utils.DisplayMessage;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import main.item.*;
-import main.utils.DisplayMessage;
+import java.util.Random;
 
 public class Room {
     private List<Monster> monsters;
@@ -18,13 +19,11 @@ public class Room {
     public static Room generateRoom(boolean isBossRoom) {
         if (isBossRoom) {
             Monster boss = Boss.generateRandomBoss();
-
             return new Room(List.of(boss));
         }
 
-        int numberOfMonsters = (int) (Math.random() * 3) + 1;
-
-        List<Monster> monsters = new ArrayList<>();
+        int numberOfMonsters = new Random().nextInt(3) + 1;
+        List<Monster> monsters = new ArrayList<>(numberOfMonsters);
 
         for (int i = 0; i < numberOfMonsters; i++) {
             // Generate a random monster
@@ -35,23 +34,18 @@ public class Room {
     }
 
     public void enterRoom(int index) {
-        Room room = this;
+        DisplayMessage.outputTextArea("Entering room " + index);
 
-        DisplayMessage.outputTextArea("Entering room ");
-
-        // display the monsters in the room
+        // Display the monsters in the room
         DisplayMessage.outputTextArea("Monsters in this room:");
-
-        for (int i = 0; i < room.getMonsters().size(); i++) {
-            DisplayMessage.outputTextArea(
-                    "- " + room.getMonsters().get(i).getName() + " (" + room.getMonsters().get(i).getHealth() + " HP)");
+        for (Monster monster : monsters) {
+            DisplayMessage.outputTextArea("- " + monster.getName() + " (" + monster.getHealth() + " HP)");
         }
-
     }
 
     // Method to check if the room is cleared
     public boolean isCleared() {
-        if (this.isCleared) {
+        if (isCleared) {
             return true;
         }
 
@@ -61,7 +55,7 @@ public class Room {
             }
         }
 
-        this.isCleared = true;
+        isCleared = true;
         return true;
     }
 
@@ -77,13 +71,11 @@ public class Room {
 
     // Method to generate a random item when the room is cleared
     public Item generateItem() {
-        if (!this.isCleared) {
+        if (!isCleared) {
             return null;
         }
 
-        Item item = Item.getRandomItem();
-
-        return item;
+        return Item.getRandomItem();
     }
 
     // Getters and setters for each attribute
