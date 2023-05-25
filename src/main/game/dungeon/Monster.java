@@ -50,7 +50,7 @@ public class Monster extends Character {
             case "Dragon":
                 width = 300;
                 height = 200;
-                characterY = 150;
+                characterY = 175;
                 break;
             case "Giant":
                 width = 200;

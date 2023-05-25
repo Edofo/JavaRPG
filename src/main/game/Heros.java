@@ -10,10 +10,13 @@ public class Heros extends Character {
     private CharacterClass characterClass;
     private List<Item> inventory;
 
-    public Heros(String name, int health, int attack, int defense, CharacterClass characterClass) {
+    private int mana;
+
+    public Heros(String name, int health, int attack, int defense, CharacterClass characterClass, int mana) {
         super(name, health, attack, defense);
         this.characterClass = characterClass;
         this.inventory = new ArrayList<>();
+        this.mana = mana;
     }
 
     // Get all damage from the character's inventory and add it to the character's
@@ -107,5 +110,13 @@ public class Heros extends Character {
         this.inventory = inventory;
         this.getAttack();
         this.getDefense();
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
     }
 }

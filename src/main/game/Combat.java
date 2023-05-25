@@ -112,7 +112,15 @@ public class Combat {
 
                 Monster monsterChoice2 = selectMonster();
 
-                abilities.useAbilities(player, monsterChoice2);
+                if (abilities.getManaCost() <= player.getMana()) {
+                    // Use abilities
+                    abilities.useAbilities(player, monsterChoice2);
+                } else {
+                    DisplayMessage.outputTextArea("Not enough mana to use this ability!");
+                    playerTurn(); // Prompt the player again for action
+                    return;
+                }
+
                 break;
             // use item
             case 3:
@@ -175,6 +183,10 @@ public class Combat {
         }
 
         choice = SelectList.selectIntFromList("Which player do you want to use?", list);
+
+        if (choice < 1 || choice > players.size()) {
+            return null;
+        }
 
         Character player = players.get(choice - 1);
 

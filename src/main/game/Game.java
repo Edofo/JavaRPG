@@ -25,6 +25,7 @@ import main.gui.CharacterSprite;
 import main.gui.GameInterface;
 import main.utils.DisplayMessage;
 import main.utils.SelectList;
+import main.utils.Sound;
 
 public class Game {
 
@@ -109,10 +110,9 @@ public class Game {
 
         int currentRoom = 0;
 
-        while (!isStopped && currentRoom < numRooms) {
-            Room room = dungeon.getRooms().get(currentRoom);
+        while (!isStopped && currentRoom < numRooms && true) {
 
-            // System.out.println("Room " + (currentRoom + 1) + " of " + numRooms);
+            Room room = dungeon.getRooms().get(currentRoom);
 
             // change the background image
             gameInterface.setBufferedImage(room.getBackgroundImage());
@@ -140,12 +140,15 @@ public class Game {
                 break;
             }
 
+            Sound.playSound("sounds/instant-win.wav");
+
             DisplayMessage.outputTextArea("You defeated the monsters!\n");
 
             room.setClear(true);
 
+            currentRoom++;
+
             if (dungeon.isCleared()) {
-                // DisplayMessage.outputTextArea("You cleared the dungeon!\n");
                 break;
             }
 
@@ -194,6 +197,11 @@ public class Game {
             }
         }
 
+        if (!isStopped) {
+            Sound.playSound("instant-win.wav");
+        }
+
+        stopGame();
     }
 
     public static void stopGame() {
@@ -225,16 +233,6 @@ public class Game {
 
         gameInterface.setCurrentPanel(buttonPanel);
 
-        // new game or exit
-        // int choice = JOptionPane.showConfirmDialog(null, "Do you want to play
-        // again?", "Play again?\n",
-        // JOptionPane.YES_NO_OPTION);
-
-        // if (choice == JOptionPane.YES_OPTION) {
-        // // startGame();
-        // } else {
-        // System.exit(0);
-        // }
     }
 
     // getters and setters

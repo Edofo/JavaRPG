@@ -30,6 +30,8 @@ public class Room {
         }
 
         int numberOfMonsters = new Random().nextInt(3) + 1;
+        // int numberOfMonsters = 1;
+
         List<Monster> monsters = new ArrayList<>(numberOfMonsters);
 
         for (int i = 0; i < numberOfMonsters; i++) {

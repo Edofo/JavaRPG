@@ -41,13 +41,13 @@ public class Party {
         }
 
         Heros player = new Heros(herosName, characterClass.getHealth(), characterClass.getAttack(),
-                characterClass.getDefense(), characterClass);
+                characterClass.getDefense(), characterClass, characterClass.getMana());
 
         Heros ai1Character = new Heros("AI1", ai1.getHealth(), ai1.getAttack(), ai1.getDefense(),
-                ai1);
+                ai1, ai1.getMana());
 
         Heros ai2Character = new Heros("AI2", ai2.getHealth(), ai2.getAttack(), ai2.getDefense(),
-                ai2);
+                ai2, ai2.getMana());
 
         return new Party(player, ai1Character, ai2Character);
     }
