@@ -11,7 +11,7 @@ import java.util.List;
 public class BackgroundPanel extends JPanel {
 
     private BufferedImage background;
-    private CharacterSprite character;
+    private List<CharacterSprite> character;
 
     private List<CharacterSprite> monsters;
 
@@ -25,18 +25,25 @@ public class BackgroundPanel extends JPanel {
         super.paintComponent(g);
         g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 
-        if (character != null) {
-            character.paint(g, 20, character.getCharacterY());
+        if (character != null && !character.isEmpty()) {
+            int characterX = 10;
+
+            for (CharacterSprite character : character) {
+
+                character.paint(g, characterX, character.getCharacterY());
+                characterX += 75;
+
+            }
         }
 
         if (monsters != null && !monsters.isEmpty()) {
-            int spaceBetweenMonsters = -50; // Adjust the space between character and monster as needed
-            int monsterX = getWidth();
+            int spaceBetweenMonsters = 100; // Adjust the space between character and monster as needed
+            int monsterX = (int) (getWidth() / 1.4);
 
             for (CharacterSprite monster : monsters) {
-                monsterX -= monster.getCharacterWidth() + spaceBetweenMonsters;
-
                 monster.paint(g, monsterX, monster.getCharacterY());
+
+                monsterX -= monster.getWidth() + spaceBetweenMonsters;
             }
         }
     }
@@ -52,13 +59,13 @@ public class BackgroundPanel extends JPanel {
         repaint();
     }
 
-    public CharacterSprite getCharacter() {
+    public List<CharacterSprite> getCharacter() {
         return character;
     }
 
-    public void setCharacter(CharacterSprite character, int x, int y) {
+    public void setCharacter(List<CharacterSprite> character) {
         this.character = character;
-        repaint(x, y, character.getCharacterWidth(), character.getCharacterHeight());
+        repaint();
     }
 
     public List<CharacterSprite> getMonsters() {

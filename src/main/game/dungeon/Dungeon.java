@@ -19,8 +19,8 @@ public class Dungeon {
         DisplayMessage.outputTextArea("Generating dungeon...");
 
         // Generate a random number of rooms between 5 and 10
-        int numberOfRooms = (int) (Math.random() * 5) + 5;
-        // int numberOfRooms = 1;
+        // int numberOfRooms = (int) (Math.random() * 5) + 5;
+        int numberOfRooms = 1;
 
         List<Room> rooms = new ArrayList<>(numberOfRooms);
 

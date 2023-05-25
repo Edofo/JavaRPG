@@ -10,6 +10,7 @@ import main.utils.ImageLoader;
 
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -37,8 +38,13 @@ public class GameInterface extends JFrame implements ActionListener {
         BufferedImage characterSkin = ImageLoader.loadImage("character_skin.png");
         BufferedImage backgroundSkin = ImageLoader.loadImage("background_skin.png");
 
+        List<CharacterSprite> characterSprites = List.of(
+                new CharacterSprite(characterSkin, 128, 220, 130),
+                new CharacterSprite(characterSkin, 128, 220, 150),
+                new CharacterSprite(characterSkin, 128, 220, 170));
+
         backgroundPanel = new BackgroundPanel(backgroundSkin);
-        backgroundPanel.setCharacter(new CharacterSprite(characterSkin, 128, 220, 130), 0, 0);
+        backgroundPanel.setCharacter(characterSprites);
 
         startButton = new JButton("Start Game");
         exitButton = new JButton("Exit Game");
