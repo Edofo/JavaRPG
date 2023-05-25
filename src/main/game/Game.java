@@ -33,6 +33,10 @@ public class Game {
     private static Dungeon dungeon;
     private static Party party;
 
+    private static Combat combat;
+
+    private static boolean isStopped = false;
+
     public Game(Dungeon dungeon, Party party) {
         Game.dungeon = dungeon;
         Game.party = party;
@@ -45,6 +49,7 @@ public class Game {
     }
 
     public static void createParty() {
+        isStopped = false;
         // Create the input panel
         JPanel inputPanel = new JPanel(new GridLayout(0, 2));
         JTextField nameTextField = new JTextField(20);
@@ -102,7 +107,9 @@ public class Game {
 
         DisplayMessage.setOutputTextArea(outputTextArea);
 
-        for (int currentRoom = 0; currentRoom < numRooms; currentRoom++) {
+        int currentRoom = 0;
+
+        while (!isStopped && currentRoom < numRooms) {
             Room room = dungeon.getRooms().get(currentRoom);
 
             // System.out.println("Room " + (currentRoom + 1) + " of " + numRooms);
@@ -123,13 +130,13 @@ public class Game {
 
             bg.setMonsters(monstersSprite);
 
-            Combat combat = new Combat(party, room.getMonsters());
+            combat = new Combat(party, room.getMonsters());
 
             combat.startCombat();
 
             // Check if the party is alive
-            if (party.getAlivePlayers().size() == 0) {
-                currentRoom = numRooms;
+            if (party.getAlivePlayers().size() == 0 || combat.getStopCombatFlag()) {
+                isStopped = true;
                 break;
             }
 
@@ -185,12 +192,15 @@ public class Game {
                     DisplayMessage.outputTextArea("You left the " + item.getName() + " on the ground.\n");
                 }
             }
-
         }
+
     }
 
     public static void stopGame() {
         DisplayMessage.outputTextArea("Game stopped!\n");
+
+        isStopped = true;
+        combat.stopCombat();
 
         JPanel buttonPanel = new JPanel(new GridLayout(0, 2));
         JButton newGameButton = new JButton("New Game");

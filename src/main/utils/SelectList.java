@@ -22,7 +22,7 @@ public class SelectList {
         // If the user cancels the input or closes the dialog, return null
         if (input == null) {
             Game.stopGame();
-            return null;
+            return -1;
         }
 
         // Get the index of the user's selection

@@ -8,20 +8,19 @@ import main.game.abilities.*;
 import main.game.characterclass.CharacterClass;
 import main.game.dungeon.Monster;
 import main.game.item.*;
-
 import main.utils.*;
 
 public class Combat {
-
     private Party party;
     private List<Monster> monsters;
+    private boolean stopCombatFlag; // Flag to indicate if the combat should stop
 
     public Combat(Party party, List<Monster> monsters) {
         this.party = party;
         this.monsters = monsters;
+        this.stopCombatFlag = false; // Initialize the flag to false
     }
 
-    // Create a method to start the combat
     public void startCombat() {
         int loop = 0;
 
@@ -50,45 +49,36 @@ public class Combat {
             DisplayMessage.outputTextArea("You lost the coin flip! The monsters start the combat!");
         }
 
-        // Loop until the combat is over
-        while (true) {
+        while (!stopCombatFlag) { // Check the flag at the beginning of each loop iteration
 
             boolean isCombatOver = isCombatOver();
-            // Check if the combat is over
             if (isCombatOver) {
-                // Print the message
                 DisplayMessage.outputTextArea("Combat is over!");
-
-                // Break the loop
                 break;
             }
 
-            // Increment the loop
             loop++;
 
-            // Check if the player's turn
             if (loop % 2 == 0) {
-                // Check if the player won the coin flip
                 if (choice == coinFlip) {
                     monsterTurn();
                 } else {
-                    // Print the message
                     DisplayMessage.outputTextArea("It's your turn!");
-
                     playerTurn();
                 }
             } else {
-                // Check if the player win the coin flip
                 if (choice == coinFlip) {
-                    // Print the message
                     DisplayMessage.outputTextArea("It's your turn!");
-
                     playerTurn();
                 } else {
                     monsterTurn();
                 }
             }
         }
+    }
+
+    public void stopCombat() {
+        stopCombatFlag = true; // Set the flag to true to stop the combat
     }
 
     // Create a method for the player's turn
@@ -344,4 +334,11 @@ public class Combat {
         }
     }
 
+    public boolean getStopCombatFlag() {
+        return stopCombatFlag;
+    }
+
+    public void setStopCombatFlag(boolean stopCombatFlag) {
+        this.stopCombatFlag = stopCombatFlag;
+    }
 }

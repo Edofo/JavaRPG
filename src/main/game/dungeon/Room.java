@@ -21,7 +21,7 @@ public class Room {
     }
 
     public static Room generateRoom(boolean isBossRoom) {
-        List<String> images = List.of("background_skin.png", "background_skin_2.png");
+        List<String> images = List.of("background_skin.png", "background_skin_2.png", "background_skin_3.png");
         BufferedImage image = ImageLoader.loadImage(images.get(new Random().nextInt(images.size())));
 
         if (isBossRoom) {
